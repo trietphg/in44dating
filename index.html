@@ -169,19 +169,19 @@
     .section-desc { font-size: 0.88rem; color: #d0d4dc; line-height: 1.5; }
     
     /* TAGS CÓ THỂ TICK CHỌN TRỰC TIẾP */
-    .tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+    .tag-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
     .tag-check {
       background: #202433;
       border: 1px solid #363b4e;
-      padding: 6px 12px;
+      padding: 8px 14px;
       border-radius: 12px;
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       color: #cbd5e1;
       cursor: pointer;
       user-select: none;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       transition: all 0.2s ease;
     }
     .tag-check:hover {
@@ -195,53 +195,12 @@
       font-weight: 600;
       box-shadow: 0 0 10px rgba(253, 80, 104, 0.25);
     }
-
-    .checklist-prompt {
-      background: rgba(253, 80, 104, 0.1);
-      border: 1px dashed var(--accent);
-      border-radius: 12px;
-      padding: 12px 14px;
-      font-size: 0.85rem;
-      color: #ff94a4;
-      line-height: 1.45;
+    .tag-check input[type="checkbox"] {
+      pointer-events: none; /* Khóa sự kiện riêng của ô input để nhận sự kiện click của cả thẻ label */
+      accent-color: var(--accent);
+      width: 17px;
+      height: 17px;
     }
-    .check-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: #13151c;
-      padding: 11px 13px;
-      border-radius: 10px;
-      cursor: pointer;
-      user-select: none;
-      border: 1px solid #282d3f;
-      transition: border-color 0.2s;
-    }
-    .check-item:hover { border-color: var(--accent); }
-    .check-item input[type="checkbox"] { accent-color: var(--accent); width: 18px; height: 18px; cursor: pointer; }
-    .check-item label { font-size: 0.85rem; color: #cbd5e1; cursor: pointer; flex: 1; }
-    
-    .calc-btn {
-      width: 100%;
-      padding: 14px;
-      border: none;
-      border-radius: 12px;
-      background: var(--accent-grad);
-      color: #fff;
-      font-size: 0.95rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .result-box {
-      display: none;
-      background: #18222d;
-      border: 1px solid #2e4760;
-      padding: 18px;
-      border-radius: 14px;
-      margin-top: 10px;
-    }
-    .score-num { font-size: 1.9rem; font-weight: 800; color: #38ef7d; text-align: center; }
-    .score-comment { font-size: 0.85rem; color: #94a3b8; line-height: 1.4; text-align: center; margin-top: 4px; }
 
     /* KHUNG BIỂU ĐỒ TRỌNG SỐ ĐỒNG ĐIỆU */
     .chart-container {
@@ -424,76 +383,124 @@
             💡 <strong>Tương tác cá nhân:</strong> Bấm trực tiếp vào các thẻ Tag hoặc tích vào các ô checklist bên dưới. Cuối trang sẽ xuất hiện <strong>Biểu đồ trọng số đồng điệu</strong> phân tích độ ăn ý theo từng khía cạnh!
           </div>
 
+         <div class="checklist-prompt">
+            💡 <strong>Tương tác cá nhân:</strong> Bấm tick chọn trực tiếp vào các ô bạn thấy đồng điệu. Cuối trang sẽ xuất hiện <strong>Biểu đồ trọng số đồng điệu</strong> phân tích độ ăn ý theo từng khía cạnh!
+          </div>
+
           <!-- NHÓM 1: GU & THẨM MỸ (CATEGORY: aesthetic) -->
           <div class="section-box">
             <div class="section-title">🎨 Gu thẩm mỹ & Sở thích riêng</div>
-            <div class="section-desc">Những điều mang lại cảm hứng sáng tạo và sự thư thái. Bấm chọn những tag bạn cùng chia sẻ sự hứng thú:</div>
+            <div class="section-desc">Những điều mang lại cảm hứng sáng tạo và sự thư thái:</div>
+            
             <div class="tag-list">
-              <div class="tag-check" data-cat="aesthetic" onclick="toggleTag(this)">☕ Cà phê rang mộc</div>
-              <div class="tag-check" data-cat="aesthetic" onclick="toggleTag(this)">🏛️ Kiến trúc & Không gian</div>
-              <div class="tag-check" data-cat="aesthetic" onclick="toggleTag(this)">🎶 Indie & Trữ tình</div>
-              <div class="tag-check" data-cat="aesthetic" onclick="toggleTag(this)">🌃 Dạo phố đêm Sài Gòn</div>
-            </div>
-            <div class="check-item">
-              <input type="checkbox" class="compat-check" data-cat="aesthetic" id="a1">
-              <label for="a1">Thích cùng nhau ngồi quán cà phê yên tĩnh trò chuyện về nghệ thuật / thiết kế</label>
+              <label class="tag-check" data-cat="aesthetic" onclick="handleTagClick(this)">
+                <input type="checkbox" class="compat-check" data-cat="aesthetic">
+                <span>☕ Cà phê rang mộc</span>
+              </label>
+
+              <label class="tag-check" data-cat="aesthetic" onclick="handleTagClick(this)">
+                <input type="checkbox" class="compat-check" data-cat="aesthetic">
+                <span>🏛️ Kiến trúc & Không gian</span>
+              </label>
+
+              <label class="tag-check" data-cat="aesthetic" onclick="handleTagClick(this)">
+                <input type="checkbox" class="compat-check" data-cat="aesthetic">
+                <span>🎶 Indie & Trữ tình</span>
+              </label>
+
+              <label class="tag-check" data-cat="aesthetic" onclick="handleTagClick(this)">
+                <input type="checkbox" class="compat-check" data-cat="aesthetic">
+                <span>🌃 Dạo phố đêm Sài Gòn</span>
+              </label>
+
+              <label class="tag-check" data-cat="aesthetic" onclick="handleTagClick(this)">
+                <input type="checkbox" class="compat-check" data-cat="aesthetic">
+                <span>🎧 Không gian quán cà phê yên tĩnh</span>
+              </label>
             </div>
           </div>
 
           <!-- NHÓM 2: LỐI SỐNG & THỂ CHẤT (CATEGORY: lifestyle) -->
           <div class="section-box">
             <div class="section-title">⚡ Lối sống, Thể chất & Kỷ luật</div>
-            <div class="section-desc">Rèn luyện thể thao đều đặn (gym, bơi lội), duy trì cơ thể săn chắc gọn gàng. Chọn những điều cùng tần số với bạn:</div>
+            <div class="section-desc">Thói quen rèn luyện thể chất và nhịp sống thường nhật:</div>
+            
             <div class="tag-list">
-              <div class="tag-check" data-cat="lifestyle" onclick="toggleTag(this)">🏋️ Kỷ luật Gym / Fitness</div>
-              <div class="tag-check" data-cat="lifestyle" onclick="toggleTag(this)">🏊 Bơi lội thư giãn</div>
-              <div class="tag-check" data-cat="lifestyle" onclick="toggleTag(this)">🌿 Không gian riêng tư</div>
-            </div>
-            <div class="check-item">
-              <input type="checkbox" class="compat-check" data-cat="lifestyle" id="l1">
-              <label for="l1">Cùng gu thích không gian chill nhẹ nhàng, không xô bồ</label>
-            </div>
-            <div class="check-item">
-              <input type="checkbox" class="compat-check" data-cat="lifestyle" id="l2">
-              <label for="l2">Ủng hộ lối sống kỷ luật thể chất, giữ gìn vóc dáng thon gọn</label>
+              <label class="tag-check" data-cat="lifestyle" onclick="handleTagClick(this)">
+                <input type="checkbox" class="compat-check" data-cat="lifestyle">
+                <span>🏋️ Kỷ luật Gym / Fitness</span>
+              </label>
+
+              <label class="tag-check" data-cat="lifestyle" onclick="handleTagClick(this)">
+                <input type="checkbox" class="compat-check" data-cat="lifestyle">
+                <span>🏊 Bơi lội thư giãn</span>
+              </label>
+
+              <label class="tag-check" data-cat="lifestyle" onclick="handleTagClick(this)">
+                <input type="checkbox" class="compat-check" data-cat="lifestyle">
+                <span>🌿 Không gian riêng tư, không xô bồ</span>
+              </label>
+
+              <label class="tag-check" data-cat="lifestyle" onclick="handleTagClick(this)">
+                <input type="checkbox" class="compat-check" data-cat="lifestyle">
+                <span>✨ Chăm chút ngoại hình gọn gàng</span>
+              </label>
             </div>
           </div>
 
-          <!-- NHÓM 3: TƯ DUY & GIÁ TRỊ SỐNG (CATEGORY: mindset) -->
+          <!-- NHÓM 3: TƯ DUY & NGUYÊN TẮC (CATEGORY: mindset) -->
           <div class="section-box">
             <div class="section-title">⚖️ Tư duy & Nguyên tắc hẹn hò</div>
-            <div class="section-desc">Ưu tiên giao tiếp chân thành, tôn trọng ranh giới và công việc của nhau:</div>
+            <div class="section-desc">Góc nhìn trong giao tiếp và cách ứng xử khi tìm hiểu:</div>
+            
             <div class="tag-list">
-              <div class="tag-check" data-cat="mindset" onclick="toggleTag(this)">📜 Tư duy Pháp lý & Logic</div>
-              <div class="tag-check" data-cat="mindset" onclick="toggleTag(this)">🎯 Tôn trọng ranh giới</div>
-              <div class="tag-check" data-cat="mindset" onclick="toggleTag(this)">💬 Trò chuyện thẳng thắn</div>
-            </div>
-            <div class="check-item">
-              <input type="checkbox" class="compat-check" data-cat="mindset" id="m1">
-              <label for="m1">Thích người sống kỷ luật, tư duy rõ ràng và biết quan tâm</label>
-            </div>
-            <div class="check-item">
-              <input type="checkbox" class="compat-check" data-cat="mindset" id="m2">
-              <label for="m2">Thích giải quyết hiểu lầm bằng sự thẳng thắn, không im lặng</label>
+              <label class="tag-check" data-cat="mindset" onclick="handleTagClick(this)">
+                <input type="checkbox" class="compat-check" data-cat="mindset">
+                <span>📜 Tư duy Pháp lý & Logic</span>
+              </label>
+
+              <label class="tag-check" data-cat="mindset" onclick="handleTagClick(this)">
+                <input type="checkbox" class="compat-check" data-cat="mindset">
+                <span>🎯 Tôn trọng không gian riêng tư</span>
+              </label>
+
+              <label class="tag-check" data-cat="mindset" onclick="handleTagClick(this)">
+                <input type="checkbox" class="compat-check" data-cat="mindset">
+                <span>💬 Thẳng thắn, không chiến tranh lạnh</span>
+              </label>
+
+              <label class="tag-check" data-cat="mindset" onclick="handleTagClick(this)">
+                <input type="checkbox" class="compat-check" data-cat="mindset">
+                <span>🤝 Tôn trọng mục tiêu phát triển của nhau</span>
+              </label>
             </div>
           </div>
 
-          <!-- NHÓM 4: GÓC RIÊNG TƯ & THÂN MẬT (CATEGORY: intimacy) -->
+          <!-- NHÓM 4: RIÊNG TƯ & THÂN MẬT (CATEGORY: intimacy) -->
           <div class="section-box" style="border-left: 4px solid var(--accent);">
             <div class="section-title">🔒 Góc riêng tư / Thân mật & XHTD (18+)</div>
-            <div class="section-desc">Cần sự gắn kết cảm xúc và sự tin cậy nhất định trước khi bước vào những cử chỉ thân mật. Tôn trọng sự đồng thuận (consent) tuyệt đối, an toàn và chu đáo:</div>
+            <div class="section-desc">Ranh giới và kỳ vọng trong các kết nối gần gũi:</div>
+            
             <div class="tag-list">
-              <div class="tag-check" data-cat="intimacy" onclick="toggleTag(this)">💖 Cảm xúc đi trước thể xác</div>
-              <div class="tag-check" data-cat="intimacy" onclick="toggleTag(this)">🛡️ An toàn & Consent</div>
-              <div class="tag-check" data-cat="intimacy" onclick="toggleTag(this)">🤫 Kín đáo & Tinh tế</div>
-            </div>
-            <div class="check-item">
-              <input type="checkbox" class="compat-check" data-cat="intimacy" id="i1">
-              <label for="i1">Đồng điệu: Cảm xúc gắn bó là nền tảng của mọi sự thân mật</label>
-            </div>
-            <div class="check-item">
-              <input type="checkbox" class="compat-check" data-cat="intimacy" id="i2">
-              <label for="i2">Thoải mái trò chuyện cởi mở về mong muốn và giới hạn của nhau</label>
+              <label class="tag-check" data-cat="intimacy" onclick="handleTagClick(this)">
+                <input type="checkbox" class="compat-check" data-cat="intimacy">
+                <span>💖 Cảm xúc đi trước thể xác</span>
+              </label>
+
+              <label class="tag-check" data-cat="intimacy" onclick="handleTagClick(this)">
+                <input type="checkbox" class="compat-check" data-cat="intimacy">
+                <span>🛡️ Đồng thuận (Consent) tuyệt đối</span>
+              </label>
+
+              <label class="tag-check" data-cat="intimacy" onclick="handleTagClick(this)">
+                <input type="checkbox" class="compat-check" data-cat="intimacy">
+                <span>🤫 Kín đáo, tinh tế & an toàn</span>
+              </label>
+
+              <label class="tag-check" data-cat="intimacy" onclick="handleTagClick(this)">
+                <input type="checkbox" class="compat-check" data-cat="intimacy">
+                <span>🗣️ Thoải mái trò chuyện về giới hạn của nhau</span>
+              </label>
             </div>
           </div>
 
@@ -599,12 +606,18 @@
       }
     }
 
-    // BẬT/TẮT CHỌN TAG TRỰC TIẾP
-    function toggleTag(el) {
-      el.classList.toggle('active');
+    // HÀM XỬ LÝ CLICK: TỰ TICK CHECKBOX VÀ BẬT SÁNG VIỀN Ô
+    function handleTagClick(labelEl) {
+      const cb = labelEl.querySelector('input[type="checkbox"]');
+      cb.checked = !cb.checked;
+      if (cb.checked) {
+        labelEl.classList.add('active');
+      } else {
+        labelEl.classList.remove('active');
+      }
     }
 
-    // TÍNH ĐIỂM TỔNG VÀ VẼ BIỂU ĐỒ TRỌNG SỐ TỪNG NHÓM
+    // HÀM TÍNH TOÁN VÀ VẼ BIỂU ĐỒ TRỌNG SỐ TỪ CÁC Ô ĐÃ TICK
     function calculateMatch() {
       const categories = {
         aesthetic: { name: "Gu Thẩm Mỹ", total: 0, checked: 0 },
@@ -613,16 +626,7 @@
         intimacy:  { name: "Thân Mật & Riêng Tư", total: 0, checked: 0 }
       };
 
-      // 1. Quét toàn bộ thẻ tag tương tác
-      document.querySelectorAll('.tag-check').forEach(tag => {
-        const cat = tag.getAttribute('data-cat');
-        if (categories[cat]) {
-          categories[cat].total++;
-          if (tag.classList.contains('active')) categories[cat].checked++;
-        }
-      });
-
-      // 2. Quét toàn bộ ô checkbox
+      // Quét tất cả các ô checkbox nằm trong các tag
       document.querySelectorAll('.compat-check').forEach(cb => {
         const cat = cb.getAttribute('data-cat');
         if (categories[cat]) {
@@ -631,7 +635,6 @@
         }
       });
 
-      // 3. Tính điểm tổng
       let grandTotal = 0;
       let grandChecked = 0;
       let highestCategory = "";
@@ -644,7 +647,7 @@
         const ratio = item.total > 0 ? (item.checked / item.total) : 0;
         const percent = Math.round(ratio * 100);
 
-        // Cập nhật thanh biểu đồ
+        // Cập nhật giá trị hiển thị trên thanh biểu đồ
         document.getElementById(`pct-${cat}`).innerText = `${percent}% (${item.checked}/${item.total})`;
         document.getElementById(`bar-${cat}`).style.width = `${percent}%`;
 
