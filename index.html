@@ -4,19 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Personal Dating Profile</title>
-
-  <!-- ========================================== -->
-  <!-- PHẦN 1: THƯ VIỆN BẢO MẬT & MÃ HÓA (CRYPTOJS) -->
-  <!-- ========================================== -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-
-  <!-- ========================================== -->
-  <!-- PHẦN 2: TOÀN BỘ CSS GIAO DIỆN (STYLING)    -->
-  <!-- ========================================== -->
   <style>
-    /* ---------------------------------------- */
-    /* 2.1. CẤU HÌNH BIẾN MÀU SẮC & NỀN TOÀN TRANG */
-    /* ---------------------------------------- */
     :root {
       --bg: #0f1117;
       --card-bg: #1a1d26;
@@ -38,480 +26,6 @@
       padding: 20px 12px;
     }
 
-    /* ---------------------------------------- */
-    /* 2.2. CSS CHO MÀN HÌNH KHÓA & NHẬP PASSCODE */
-    /* ---------------------------------------- */
-    #lock-screen {
-      background: var(--card-bg);
-      padding: 32px 24px;
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      text-align: center;
-      max-width: 380px;
-      width: 100%;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-    #lock-screen h2 { font-size: 1.3rem; margin-bottom: 8px; }
-    #lock-screen p { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 20px; }
-    .input-box { display: flex; flex-direction: column; gap: 12px; }
-    .password-wrapper { position: relative; width: 100%; display: flex; align-items: center; }
-    input#passInput {
-      width: 100%;
-      padding: 12px 42px 12px 16px;
-      background: #13151c;
-      border: 1px solid #363b4e;
-      border-radius: 10px;
-      color: white;
-      font-size: 1rem;
-      outline: none;
-    }
-    input#passInput:focus { border-color: var(--accent); }
-    .eye-btn {
-      position: absolute;
-      right: 12px;
-      background: none;
-      border: none;
-      color: var(--text-dim);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      padding: 4px;
-    }
-    .eye-btn svg { width: 20px; height: 20px; fill: currentColor; }
-    button.unlock-btn {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      background: var(--accent-grad);
-      color: white;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    #error-msg {
-      color: #ff6b6b;
-      font-size: 0.85rem;
-      margin-top: 10px;
-      display: none;
-      animation: shake 0.3s ease-in-out;
-    }
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      20%, 60% { transform: translateX(-6px); }
-      40%, 80% { transform: translateX(6px); }
-    }
-
-    /* ---------------------------------------- */
-    /* 2.3. CSS CHO KHUNG HỒ SƠ TINDER CHÍNH     */
-    /* ---------------------------------------- */
-    #app { display: none; width: 100%; max-width: 440px; }
-    .profile-container {
-      background: var(--card-bg);
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-    .cover-photo { width: 100%; height: 380px; position: relative; background: #252836; }
-    .cover-photo img { width: 100%; height: 100%; object-fit: cover; }
-    .photo-tag {
-      position: absolute;
-      bottom: 16px;
-      left: 16px;
-      background: rgba(15, 17, 23, 0.75);
-      backdrop-filter: blur(8px);
-      padding: 6px 14px;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 1.25rem;
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-    .content-body { padding: 20px; display: flex; flex-direction: column; gap: 16px; }
-    .section-box {
-      background: #13151c;
-      border: 1px solid #282c3c;
-      border-radius: 14px;
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .section-title { font-size: 0.95rem; font-weight: 700; color: #ff7b90; display: flex; align-items: center; gap: 6px; }
-    .section-desc { font-size: 0.88rem; color: #d0d4dc; line-height: 1.45; }
-    .tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
-    .tag-item {
-      background: #262a38;
-      border: 1px solid #363b4e;
-      padding: 4px 10px;
-      border-radius: 8px;
-      font-size: 0.78rem;
-      color: #e2e8f0;
-    }
-    .checklist-prompt {
-      background: rgba(253, 80, 104, 0.1);
-      border: 1px dashed var(--accent);
-      border-radius: 10px;
-      padding: 10px 12px;
-      font-size: 0.82rem;
-      color: #ff94a4;
-      line-height: 1.4;
-    }
-    .check-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: #1b1e2a;
-      padding: 10px 12px;
-      border-radius: 10px;
-      cursor: pointer;
-      user-select: none;
-      border: 1px solid #282d3f;
-    }
-    .check-item input[type="checkbox"] { accent-color: var(--accent); width: 17px; height: 17px; }
-    .check-item label { font-size: 0.85rem; color: #cbd5e1; cursor: pointer; flex: 1; }
-    .calc-btn {
-      width: 100%;
-      padding: 13px;
-      border: none;
-      border-radius: 12px;
-      background: var(--accent-grad);
-      color: #fff;
-      font-size: 0.95rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .result-box {
-      display: none;
-      background: #18222d;
-      border: 1px solid #2e4760;
-      padding: 16px;
-      border-radius: 12px;
-      text-align: center;
-      margin-top: 8px;
-    }
-    .score-num { font-size: 1.8rem; font-weight: 800; color: #38ef7d; margin-bottom: 4px; }
-    .score-comment { font-size: 0.85rem; color: #94a3b8; line-height: 1.4; }
-
-    /* ---------------------------------------- */
-    /* 2.4. CSS CHO NÚT & POP-UP TRẮC NGHIỆM    */
-    /* ---------------------------------------- */
-    .quiz-launcher-btn {
-      width: 100%;
-      padding: 14px;
-      border: none;
-      border-radius: 12px;
-      background: var(--quiz-grad);
-      color: #fff;
-      font-size: 0.95rem;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
-    }
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.85);
-      backdrop-filter: blur(6px);
-      z-index: 999;
-      justify-content: center;
-      align-items: center;
-      padding: 16px;
-    }
-    .quiz-card {
-      background: var(--card-bg);
-      border: 1px solid #363b4e;
-      border-radius: 18px;
-      max-width: 400px;
-      width: 100%;
-      padding: 22px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      position: relative;
-    }
-    .quiz-header { display: flex; justify-content: space-between; align-items: center; }
-    .quiz-progress { font-size: 0.85rem; color: #a29bfe; font-weight: 600; }
-    .quiz-close { background: none; border: none; color: #9aa0a6; font-size: 1.3rem; cursor: pointer; }
-    .quiz-question { font-size: 1.05rem; font-weight: 600; line-height: 1.4; }
-    .quiz-options { display: flex; flex-direction: column; gap: 10px; }
-    .quiz-opt-btn {
-      background: #13151c;
-      border: 1px solid #2e3346;
-      border-radius: 10px;
-      padding: 12px 14px;
-      text-align: left;
-      color: #e2e8f0;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .quiz-opt-btn:hover { border-color: #a29bfe; background: #212536; }
-    .quiz-result-view { text-align: center; display: none; flex-direction: column; gap: 12px; }
-  </style>
-</head>
-<body>
-
-  <!-- ========================================== -->
-  <!-- PHẦN 3: GIAO DIỆN MÀN HÌNH KHÓA (HTML)     -->
-  <!-- ========================================== -->
-  <div id="lock-screen">
-    <div style="font-size: 2.5rem; margin-bottom: 12px;">🔒</div>
-    <h2>Trang cá nhân giới hạn</h2>
-    <p>Nhập Passcode để mở khóa toàn bộ hồ sơ.</p>
-    
-    <div class="input-box">
-      <div class="password-wrapper">
-        <input type="password" id="passInput" placeholder="Nhập Passcode..." autofocus onkeydown="if(event.key==='Enter') unlockSite()">
-        <button type="button" class="eye-btn" onclick="togglePasswordVisibility()">
-          <!-- ICON CON MẮT MỞ -->
-          <svg id="eye-icon-open" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zm0 12.5c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-          <!-- ICON CON MẮT ĐÓNG -->
-          <svg id="eye-icon-closed" style="display: none;" viewBox="0 0 24 24"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.44-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.17c0-1.66-1.34-3-3-3l-.17.02z"/></svg>
-        </button>
-      </div>
-      <button class="unlock-btn" onclick="unlockSite()">Mở khóa hồ sơ</button>
-    </div>
-    <div id="error-msg"></div>
-  </div>
-
-  <!-- ========================================== -->
-  <!-- PHẦN 4: VÙNG CHỨA PROFILE SAU MỞ KHÓA     -->
-  <!-- ========================================== -->
-  <main id="app"></main>
-
-  <!-- ========================================== -->
-  <!-- PHẦN 5: TOÀN BỘ LOGIC JAVASCRIPT          -->
-  <!-- ========================================== -->
-  <script>
-    // ----------------------------------------
-    // 5.1. BIẾN ĐẾM SỐ LẦN NHẬP SAI MẬT KHẨU
-    // ----------------------------------------
-    let failedAttempts = 0;
-
-    // ----------------------------------------
-    // 5.2. LOGIC BẬT/TẮT XEM MẬT MÃ (CON MẮT)
-    // ----------------------------------------
-    function togglePasswordVisibility() {
-      const passInput = document.getElementById("passInput");
-      const iconOpen = document.getElementById("eye-icon-open");
-      const iconClosed = document.getElementById("eye-icon-closed");
-      if (passInput.type === "password") {
-        passInput.type = "text";
-        iconOpen.style.display = "none";
-        iconClosed.style.display = "block";
-      } else {
-        passInput.type = "password";
-        iconOpen.style.display = "block";
-        iconClosed.style.display = "none";
-      }
-    }
-
-    // ----------------------------------------
-    // 5.3. NỘI DUNG RUỘT PROFILE TINDER (RAW_HTML)
-    // (CHỖ NÀY CHỨA CÁC TRƯỜNG THÔNG TIN CÁ NHÂN & MODAL)
-    // ----------------------------------------
-    const RAW_HTML = `
-      <div class="profile-container">
-        <!-- [KHỐI ẢNH BÌA] -->
-        <div class="cover-photo">
-          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=700&q=80" alt="Avatar">
-          <div class="photo-tag">Gia Triết, 21 ✨</div>
-        </div>
-
-        <div class="content-body">
-          <!-- [KHỐI NÚT TRẮC NGHIỆM] -->
-          <button class="quiz-launcher-btn" onclick="openQuizModal()">
-            🎮 Chơi Mini-Game: 10 Câu Hiểu Nhau
-          </button>
-
-          <!-- [KHỐI HƯỚNG DẪN CHECKBOX] -->
-          <div class="checklist-prompt">
-            💡 <strong>Interactive Check:</strong> Tích vào các ô đồng điệu bên dưới để cuối trang chấm điểm ăn ý!
-          </div>
-
-          <!-- [KHỐI TRƯỜNG THÔNG TIN 1: TỔNG QUAN] -->
-          <div class="section-box">
-            <div class="section-title">👤 Giới thiệu chung</div>
-            <div class="section-desc">Kỷ luật, chân thành, yêu chiều sâu kiến trúc, tư duy luật học và nhạc acoustic.</div>
-            <div class="tag-list">
-              <span class="tag-item">📍 TP. Hồ Chí Minh</span>
-              <span class="tag-item">☕ Cà phê rang mộc</span>
-            </div>
-            <div class="check-item">
-              <input type="checkbox" class="compat-check" id="c1"><label for="c1">Thích người sống kỷ luật, tư duy rõ ràng</label>
-            </div>
-          </div>
-
-          <!-- [KHỐI TRƯỜNG THÔNG TIN 2: PHONG CÁCH SỐNG] -->
-          <div class="section-box">
-            <div class="section-title">⚡ Phong cách sống & Thói quen</div>
-            <div class="section-desc">Tập luyện giữ cơ thể săn chắc (gym, bơi lội), ưu tiên không gian tĩnh lặng.</div>
-            <div class="check-item">
-              <input type="checkbox" class="compat-check" id="c2"><label for="c2">Ủng hộ lối sống kỷ luật thể chất, gọn gàng</label>
-            </div>
-          </div>
-
-          <!-- [KHỐI TRƯỜNG THÔNG TIN 3: GÓC RIÊNG TƯ / XHTD] -->
-          <div class="section-box" style="border-left: 4px solid var(--accent);">
-            <div class="section-title">🔒 Góc riêng tư / Thân mật & XHTD</div>
-            <div class="section-desc">Đề cao cảm xúc và sự tin cậy tuyệt đối trước khi thân mật. Luôn tôn trọng consent và ranh giới.</div>
-            <div class="check-item">
-              <input type="checkbox" class="compat-check" id="c3"><label for="c3">Cảm xúc gắn bó là nền tảng của mọi sự gần gũi</label>
-            </div>
-          </div>
-
-          <!-- [KHỐI TÍNH ĐIỂM TƯƠNG THÍCH CHECKBOX] -->
-          <div style="margin-top: 8px;">
-            <button class="calc-btn" onclick="calculateMatch()">Xem độ hợp nhau của tụi mình</button>
-            <div id="matchResult" class="result-box">
-              <div id="scoreDisplay" class="score-num">0%</div>
-              <div id="scoreText" class="score-comment"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- [KHỐI POP-UP MODAL TRẮC NGHIỆM] -->
-      <div id="quizModal" class="modal-overlay">
-        <div class="quiz-card">
-          <div class="quiz-header">
-            <span id="qProgress" class="quiz-progress">Câu 1/10</span>
-            <button class="quiz-close" onclick="closeQuizModal()">&times;</button>
-          </div>
-          <div id="qArea">
-            <div id="qTitle" class="quiz-question"></div>
-            <div id="qOptions" class="quiz-options" style="margin-top: 14px;"></div>
-          </div>
-          <div id="qResultArea" class="quiz-result-view">
-            <div style="font-size: 2.2rem;">🎯</div>
-            <h3 style="font-size: 1.2rem;">Chỉ số ăn ý trắc nghiệm</h3>
-            <div id="qFinalScore" style="font-size: 2rem; font-weight: 800; color: #38ef7d;">0/10</div>
-            <p id="qFinalMsg" style="font-size: 0.88rem; color: #94a3b8; line-height: 1.4;"></p>
-            <button class="quiz-launcher-btn" style="margin-top: 10px;" onclick="closeQuizModal()">Quay lại hồ sơ</button>
-          </div>
-        </div>
-      </div>
-    `;
-
-    // ----------------------------------------
-    // 5.4. LOGIC MỞ KHÓA TRANG WEB VỚI PASSCODE
-    // ----------------------------------------
-    function unlockSite() {
-      const pass = document.getElementById("passInput").value.trim();
-      const errorMsg = document.getElementById("error-msg");
-      const lockScreen = document.getElementById("lock-screen");
-      const app = document.getElementById("app");
-
-      if (pass === "noinaycotui") {
-        lockScreen.style.display = "none";
-        app.innerHTML = RAW_HTML;
-        app.style.display = "block";
-        errorMsg.style.display = "none";
-      } else {
-        failedAttempts++;
-        errorMsg.innerText = `Bạn đã nhập sai lần thứ ${failedAttempts}!`;
-        errorMsg.style.display = "block";
-        errorMsg.style.animation = 'none';
-        errorMsg.offsetHeight;
-        errorMsg.style.animation = 'shake 0.3s ease-in-out';
-      }
-    }
-
-    // ----------------------------------------
-    // 5.5. LOGIC CHẤM ĐIỂM TỔNG CHECKBOX
-    // ----------------------------------------
-    function calculateMatch() {
-      const checkboxes = document.querySelectorAll('.compat-check');
-      const total = checkboxes.length;
-      let checkedCount = 0;
-
-      checkboxes.forEach(cb => {
-        if (cb.checked) checkedCount++;
-      });
-
-      const percent = Math.round((checkedCount / total) * 100);
-      const resultBox = document.getElementById('matchResult');
-      const scoreDisplay = document.getElementById('scoreDisplay');
-      const scoreText = document.getElementById('scoreText');
-
-      scoreDisplay.innerText = percent + "% (" + checkedCount + "/" + total + " điểm)";
-      if (percent >= 80) {
-        scoreText.innerText = "Tần số trùng khớp đáng kinh ngạc! Rất nhiều điểm chung về tư duy và lối sống.";
-      } else if (percent >= 50) {
-        scoreText.innerText = "Khá tương đồng ở những điểm mấu chốt. Những góc khác biệt sẽ là đề tài trò chuyện thú vị.";
-      } else {
-        scoreText.innerText = "Hai thế giới có vẻ khá đối lập, nhưng bù trừ cho nhau lại tạo nên sức hút lạ!";
-      }
-
-      resultBox.style.display = "block";
-      resultBox.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    // ----------------------------------------
-    // 5.6. DỮ LIỆU CÂU HỎI TRẮC NGHIỆM (QUIZ_DATA)
-    // ----------------------------------------
-    const QUIZ_DATA = [
-      {
-        q: "1. Buổi hẹn hò lý tưởng cuối tuần của bạn là gì?",
-        opts: ["Cà phê acoustic yên tĩnh, nói chuyện sâu", "Club/bar nhạc sôi động", "Đi dạo phố đêm rồi ăn vặt"],
-        matchIdx: [0, 2]
-      },
-      {
-        q: "2. Khi gặp mâu thuẫn hay hiểu lầm, bạn sẽ làm gì?",
-        opts: ["Im lặng vài ngày", "Thẳng thắn trò chuyện để giải quyết ngay", "Đăng status bóng gió"],
-        matchIdx: [1]
-      }
-      // CÁC CÂU TIẾP THEO SẼ ĐƯỢC THÊM VÀO ĐÂY
-    ];
-
-    // ----------------------------------------
-    <!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Personal Dating Profile</title>
-
-  <!-- ========================================== -->
-  <!-- PHẦN 1: THƯ VIỆN BẢO MẬT & MÃ HÓA (CRYPTOJS) -->
-  <!-- ========================================== -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-
-  <!-- ========================================== -->
-  <!-- PHẦN 2: TOÀN BỘ CSS GIAO DIỆN (STYLING)    -->
-  <!-- ========================================== -->
-  <style>
-    /* 2.1. CẤU HÌNH BIẾN MÀU SẮC & NỀN TOÀN TRANG */
-    :root {
-      --bg: #0f1117;
-      --card-bg: #1a1d26;
-      --accent: #fd5068;
-      --accent-grad: linear-gradient(45deg, #ff6036, #fd5068);
-      --quiz-grad: linear-gradient(45deg, #6c5ce7, #a29bfe);
-      --text: #ffffff;
-      --text-dim: #9aa0a6;
-      --border: #2a2e3d;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px 12px;
-    }
-
-    /* 2.2. CSS MÀN HÌNH KHÓA & NHẬP PASSCODE */
     #lock-screen {
       background: var(--card-bg);
       padding: 32px 24px;
@@ -581,7 +95,6 @@
       40%, 80% { transform: translateX(6px); }
     }
 
-    /* 2.3. CSS PROFILE & CARD TINDER */
     #app { display: none; width: 100%; max-width: 440px; }
     .profile-container {
       background: var(--card-bg);
@@ -672,7 +185,6 @@
     .score-num { font-size: 1.8rem; font-weight: 800; color: #38ef7d; margin-bottom: 4px; }
     .score-comment { font-size: 0.85rem; color: #94a3b8; line-height: 1.4; }
 
-    /* 2.4. CSS NÚT & POP-UP GAME HUB */
     .quiz-launcher-btn {
       width: 100%;
       padding: 14px;
@@ -734,9 +246,6 @@
 </head>
 <body>
 
-  <!-- ========================================== -->
-  <!-- PHẦN 3: GIAO DIỆN MÀN HÌNH KHÓA (HTML)     -->
-  <!-- ========================================== -->
   <div id="lock-screen">
     <div style="font-size: 2.5rem; margin-bottom: 12px;">🔒</div>
     <h2>Trang cá nhân giới hạn</h2>
@@ -755,23 +264,11 @@
     <div id="error-msg"></div>
   </div>
 
-  <!-- ========================================== -->
-  <!-- PHẦN 4: VÙNG CHỨA PROFILE SAU MỞ KHÓA     -->
-  <!-- ========================================== -->
   <main id="app"></main>
 
-  <!-- ========================================== -->
-  <!-- PHẦN 5: TOÀN BỘ LOGIC JAVASCRIPT          -->
-  <!-- ========================================== -->
   <script>
-    // ----------------------------------------
-    // 5.1. BIẾN ĐẾM SỐ LẦN NHẬP SAI MẬT KHẨU
-    // ----------------------------------------
     let failedAttempts = 0;
 
-    // ----------------------------------------
-    // 5.2. LOGIC BẬT/TẮT XEM MẬT MÃ (CON MẮT)
-    // ----------------------------------------
     function togglePasswordVisibility() {
       const passInput = document.getElementById("passInput");
       const iconOpen = document.getElementById("eye-icon-open");
@@ -787,29 +284,22 @@
       }
     }
 
-    // ----------------------------------------
-    // 5.3. NỘI DUNG RUỘT PROFILE TINDER (RAW_HTML)
-    // ----------------------------------------
     const RAW_HTML = `
       <div class="profile-container">
-        <!-- ẢNH BÌA PROFILE -->
         <div class="cover-photo">
           <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=700&q=80" alt="Avatar">
           <div class="photo-tag">Gia Triết, 21 ✨</div>
         </div>
 
         <div class="content-body">
-          <!-- NÚT MỞ GAME HUB -->
           <button class="quiz-launcher-btn" onclick="openQuizModal()">
             🎮 Chơi Mini-Game: Thử Độ Ăn Ý
           </button>
 
-          <!-- DÒNG NHẮC CHECKLIST -->
           <div class="checklist-prompt">
             💡 <strong>Interactive Check:</strong> Tích chọn các mục đồng điệu bên dưới, cuối trang sẽ có nút chấm điểm độ hợp nhau của tụi mình!
           </div>
 
-          <!-- TRƯỜNG 1: TỔNG QUAN -->
           <div class="section-box">
             <div class="section-title">👤 Tổng quan bản thân</div>
             <div class="section-desc">Kỷ luật, thích sự rõ ràng và chiều sâu. Quan tâm đến kiến trúc, tư duy pháp lý, âm nhạc và những buổi dạo phố đêm tĩnh lặng.</div>
@@ -825,7 +315,6 @@
             </div>
           </div>
 
-          <!-- TRƯỜNG 2: PHONG CÁCH SỐNG -->
           <div class="section-box">
             <div class="section-title">⚡ Phong cách sống & Thói quen</div>
             <div class="section-desc">Rèn luyện thể chất đều đặn (gym, bơi lội), giữ cơ thể săn chắc gọn gàng. Thích không gian riêng tư, yên tĩnh thay vì tụ tập xô bồ.</div>
@@ -839,7 +328,6 @@
             </div>
           </div>
 
-          <!-- TRƯỜNG 3: QUAN ĐIỂM HẸN HÒ -->
           <div class="section-box">
             <div class="section-title">🎯 Quan điểm kết nối & Hẹn hò</div>
             <div class="section-desc">Ưu tiên giao tiếp chân thành, tôn trọng ranh giới của nhau. Thích những buổi trò chuyện sâu về góc nhìn cuộc sống hơn là những lời xã giao.</div>
@@ -853,7 +341,6 @@
             </div>
           </div>
 
-          <!-- TRƯỜNG 4: GÓC RIÊNG TƯ / XHTD -->
           <div class="section-box" style="border-left: 4px solid var(--accent);">
             <div class="section-title">🔒 Góc riêng tư / Thân mật & XHTD</div>
             <div class="section-desc">Cần sự gắn kết cảm xúc và sự tin cậy nhất định trước khi bước vào những cử chỉ thân mật. Tôn trọng sự đồng thuận (consent) tuyệt đối, an toàn và chu đáo.</div>
@@ -867,7 +354,6 @@
             </div>
           </div>
 
-          <!-- TÍNH ĐIỂM CHECKLIST -->
           <div style="margin-top: 8px;">
             <button class="calc-btn" onclick="calculateMatch()">Xem độ hợp nhau của tụi mình</button>
             <div id="matchResult" class="result-box">
@@ -878,7 +364,6 @@
         </div>
       </div>
 
-      <!-- POP-UP MODAL TRẮC NGHIỆM -->
       <div id="quizModal" class="modal-overlay">
         <div class="quiz-card">
           <div class="quiz-header">
@@ -894,9 +379,6 @@
       </div>
     `;
 
-    // ----------------------------------------
-    // 5.4. LOGIC MỞ KHÓA TRANG WEB VỚI PASSCODE
-    // ----------------------------------------
     function unlockSite() {
       const pass = document.getElementById("passInput").value.trim();
       const errorMsg = document.getElementById("error-msg");
@@ -918,9 +400,6 @@
       }
     }
 
-    // ----------------------------------------
-    // 5.5. LOGIC CHẤM ĐIỂM TỔNG CHECKLIST
-    // ----------------------------------------
     function calculateMatch() {
       const checkboxes = document.querySelectorAll('.compat-check');
       const total = checkboxes.length;
@@ -948,9 +427,6 @@
       resultBox.scrollIntoView({ behavior: 'smooth' });
     }
 
-    // ----------------------------------------
-    // 5.6. DỮ LIỆU CÂU HỎI THEO CHỦ ĐỀ (QUIZ_DATA_HUB)
-    // ----------------------------------------
     const QUIZ_DATA_HUB = {
       personality: {
         title: "Tính Cách & Sở Thích",
@@ -1047,9 +523,6 @@
       }
     };
 
-    // ----------------------------------------
-    // 5.7. LOGIC QUẢN LÝ ĐIỂM, LƯỢT CHƠI LẠI VÀ GAME HUB
-    // ----------------------------------------
     let currentTopicKey = "";
     let currentQ = 0;
     let quizScore = 0;
@@ -1261,28 +734,6 @@
       `;
       resArea.style.display = "flex";
     }
-  </script>
-</body>
-</html>
-    function showQuizResult() {
-      document.getElementById("qArea").style.display = "none";
-      const resArea = document.getElementById("qResultArea");
-      const finalScore = document.getElementById("qFinalScore");
-      const finalMsg = document.getElementById("qFinalMsg");
-
-      finalScore.innerText = `${quizScore}/${QUIZ_DATA.length} Câu Trùng Khớp`;
-      if (quizScore >= Math.round(QUIZ_DATA.length * 0.8)) {
-        finalMsg.innerText = "Tần số suy nghĩ ăn khớp hơn 80%! Cực kỳ hợp gu sống.";
-      } else if (quizScore >= Math.round(QUIZ_DATA.length * 0.5)) {
-        finalMsg.innerText = "Tương thích ở mức tốt, có nhiều quan điểm chung để phát triển.";
-      } else {
-        finalMsg.innerText = "Quan điểm khá khác biệt, nhưng đối lập thường tạo nên điều thú vị.";
-      }
-      resArea.style.display = "flex";
-    }
-
-
-
   </script>
 </body>
 </html>
