@@ -23,9 +23,10 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      padding: 20px 12px;
+      padding: 16px;
     }
 
+    /* MÀN HÌNH KHÓA BAN ĐẦU */
     #lock-screen {
       background: var(--card-bg);
       padding: 32px 24px;
@@ -95,8 +96,41 @@
       40%, 80% { transform: translateX(6px); }
     }
 
-    #app { display: none; width: 100%; max-width: 440px; }
-    .profile-container {
+    /* BỐ CỤC KHUNG HỒ SƠ CHÍNH */
+    #app { display: none; width: 100%; max-width: 900px; margin: auto; }
+    .profile-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+    }
+
+    /* RESPONSIVE TRÊN LAPTOP / MÀN HÌNH LỚN (> 850px) */
+    @media (min-width: 850px) {
+      .profile-layout {
+        display: grid;
+        grid-template-columns: 340px 1fr;
+        gap: 24px;
+        align-items: start;
+      }
+      .left-column {
+        position: sticky;
+        top: 24px;
+      }
+      .right-column {
+        max-height: 92vh;
+        overflow-y: auto;
+        padding-right: 8px;
+      }
+      /* Tùy chỉnh thanh cuộn bên phải */
+      .right-column::-webkit-scrollbar { width: 6px; }
+      .right-column::-webkit-scrollbar-track { background: #13151c; border-radius: 4px; }
+      .right-column::-webkit-scrollbar-thumb { background: #363b4e; border-radius: 4px; }
+      .right-column::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+    }
+
+    /* THẺ THÔNG TIN CỐ ĐỊNH BÊN TRÁI */
+    .identity-card {
       background: var(--card-bg);
       border-radius: 20px;
       border: 1px solid var(--border);
@@ -105,32 +139,40 @@
       display: flex;
       flex-direction: column;
     }
-    .cover-photo { width: 100%; height: 380px; position: relative; background: #252836; }
+    .cover-photo { width: 100%; height: 320px; position: relative; background: #252836; }
     .cover-photo img { width: 100%; height: 100%; object-fit: cover; }
-    .photo-tag {
-      position: absolute;
-      bottom: 16px;
-      left: 16px;
-      background: rgba(15, 17, 23, 0.75);
-      backdrop-filter: blur(8px);
-      padding: 6px 14px;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 1.25rem;
-      border: 1px solid rgba(255,255,255,0.1);
+    .identity-body { padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+    
+    .id-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.88rem;
+      border-bottom: 1px dashed #282c3c;
+      padding-bottom: 8px;
     }
-    .content-body { padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+    .id-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .id-label { color: var(--text-dim); }
+    .id-val { font-weight: 600; color: #f1f5f9; text-align: right; }
+
+    /* CỘT NỘI DUNG CUỘN BÊN PHẢI */
+    .right-column {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
     .section-box {
-      background: #13151c;
-      border: 1px solid #282c3c;
-      border-radius: 14px;
-      padding: 14px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
       gap: 10px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
     }
     .section-title { font-size: 0.95rem; font-weight: 700; color: #ff7b90; display: flex; align-items: center; gap: 6px; }
-    .section-desc { font-size: 0.88rem; color: #d0d4dc; line-height: 1.45; }
+    .section-desc { font-size: 0.88rem; color: #d0d4dc; line-height: 1.5; }
     .tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
     .tag-item {
       background: #262a38;
@@ -143,28 +185,31 @@
     .checklist-prompt {
       background: rgba(253, 80, 104, 0.1);
       border: 1px dashed var(--accent);
-      border-radius: 10px;
-      padding: 10px 12px;
-      font-size: 0.82rem;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 0.85rem;
       color: #ff94a4;
-      line-height: 1.4;
+      line-height: 1.45;
     }
     .check-item {
       display: flex;
       align-items: center;
       gap: 10px;
-      background: #1b1e2a;
-      padding: 10px 12px;
+      background: #13151c;
+      padding: 11px 13px;
       border-radius: 10px;
       cursor: pointer;
       user-select: none;
       border: 1px solid #282d3f;
+      transition: border-color 0.2s;
     }
-    .check-item input[type="checkbox"] { accent-color: var(--accent); width: 17px; height: 17px; cursor: pointer; }
+    .check-item:hover { border-color: var(--accent); }
+    .check-item input[type="checkbox"] { accent-color: var(--accent); width: 18px; height: 18px; cursor: pointer; }
     .check-item label { font-size: 0.85rem; color: #cbd5e1; cursor: pointer; flex: 1; }
+    
     .calc-btn {
       width: 100%;
-      padding: 13px;
+      padding: 14px;
       border: none;
       border-radius: 12px;
       background: var(--accent-grad);
@@ -185,6 +230,7 @@
     .score-num { font-size: 1.8rem; font-weight: 800; color: #38ef7d; margin-bottom: 4px; }
     .score-comment { font-size: 0.85rem; color: #94a3b8; line-height: 1.4; }
 
+    /* NÚT VÀ GIAO DIỆN MODAL GAME HUB */
     .quiz-launcher-btn {
       width: 100%;
       padding: 14px;
@@ -216,7 +262,7 @@
       background: var(--card-bg);
       border: 1px solid #363b4e;
       border-radius: 18px;
-      max-width: 400px;
+      max-width: 420px;
       width: 100%;
       padding: 22px;
       display: flex;
@@ -246,6 +292,7 @@
 </head>
 <body>
 
+  <!-- MÀN HÌNH KHÓA BAN ĐẦU -->
   <div id="lock-screen">
     <div style="font-size: 2.5rem; margin-bottom: 12px;">🔒</div>
     <h2>Trang cá nhân giới hạn</h2>
@@ -264,6 +311,7 @@
     <div id="error-msg"></div>
   </div>
 
+  <!-- NƠI CHỨA HỒ SƠ 2 CỘT SAU MỞ KHÓA -->
   <main id="app"></main>
 
   <script>
@@ -284,30 +332,65 @@
       }
     }
 
+    // BỐ CỤC GIAO DIỆN 2 CỘT (DESKTOP) HOẶC 1 CỘT (MOBILE)
     const RAW_HTML = `
-      <div class="profile-container">
-        <div class="cover-photo">
-          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=700&q=80" alt="Avatar">
-          <div class="photo-tag">Gia Triết, 21 ✨</div>
-        </div>
+      <div class="profile-layout">
+        
+        <!-- CỘT TRÁI: THÔNG TIN CĂN CƯỚC CỐ ĐỊNH & NÚT MỞ GAME HUB -->
+        <aside class="left-column">
+          <div class="identity-card">
+            <div class="cover-photo">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=700&q=80" alt="Avatar">
+            </div>
+            <div class="identity-body">
+              <div class="id-row">
+                <span class="id-label">Họ và tên</span>
+                <span class="id-val" style="color:#ff7b90; font-size:1rem;">Phạm Gia Triết</span>
+              </div>
+              <div class="id-row">
+                <span class="id-label">Năm sinh / Tuổi</span>
+                <span class="id-val">2005 (21 tuổi)</span>
+              </div>
+              <div class="id-row">
+                <span class="id-label">Cung hoàng đạo</span>
+                <span class="id-val">Xử Nữ (Virgo ♍)</span>
+              </div>
+              <div class="id-row">
+                <span class="id-label">Khu vực sống</span>
+                <span class="id-val">TP. Hồ Chí Minh</span>
+              </div>
+              <div class="id-row">
+                <span class="id-label">Chuyên môn</span>
+                <span class="id-val">Luật & Kiến trúc</span>
+              </div>
+              <div class="id-row">
+                <span class="id-label">Tình trạng</span>
+                <span class="id-val" style="color:#38ef7d;">Đang tìm hiểu ✨</span>
+              </div>
 
-        <div class="content-body">
-          <button class="quiz-launcher-btn" onclick="openQuizModal()">
-            🎮 Chơi Mini-Game: Thử Độ Ăn Ý
-          </button>
+              <!-- NÚT MỞ TRÒ CHƠI NẰM CỐ ĐỊNH NGAY DƯỚI THẺ CĂN CƯỚC -->
+              <button class="quiz-launcher-btn" style="margin-top:6px;" onclick="openQuizModal()">
+                🎮 Mini-Game: Thử Độ Ăn Ý
+              </button>
+            </div>
+          </div>
+        </aside>
 
+        <!-- CỘT PHẢI: CHI TIẾT SỞ THÍCH, NGUYÊN TẮC & CHECKBOX TƯƠNG THÍCH -->
+        <section class="right-column">
           <div class="checklist-prompt">
-            💡 <strong>Interactive Check:</strong> Tích chọn các mục đồng điệu bên dưới, cuối trang sẽ có nút chấm điểm độ hợp nhau của tụi mình!
+            💡 <strong>Interactive Check:</strong> Đọc từng phần dưới đây, nếu thấy đồng điệu hoặc cùng tần số, hãy tích vào ô checkbox. Cuối trang có nút chấm điểm tương thích của hai ta!
           </div>
 
+          <!-- PHẦN 1: GIỚI THIỆU CHUNG -->
           <div class="section-box">
             <div class="section-title">👤 Tổng quan bản thân</div>
             <div class="section-desc">Kỷ luật, thích sự rõ ràng và chiều sâu. Quan tâm đến kiến trúc, tư duy pháp lý, âm nhạc và những buổi dạo phố đêm tĩnh lặng.</div>
             <div class="tag-list">
-              <span class="tag-item">📍 TP. Hồ Chí Minh</span>
               <span class="tag-item">☕ Cà phê rang mộc</span>
               <span class="tag-item">🎶 Indie & Trữ tình</span>
-              <span class="tag-item">⚖️ Pháp lý & Kỷ luật</span>
+              <span class="tag-item">⚖️ Pháp lý & Tư duy</span>
+              <span class="tag-item">🏛️ Kiến trúc</span>
             </div>
             <div class="check-item">
               <input type="checkbox" class="compat-check" id="c1">
@@ -315,22 +398,24 @@
             </div>
           </div>
 
+          <!-- PHẦN 2: PHONG CÁCH SỐNG & THỂ CHẤT -->
           <div class="section-box">
-            <div class="section-title">⚡ Phong cách sống & Thói quen</div>
-            <div class="section-desc">Rèn luyện thể chất đều đặn (gym, bơi lội), giữ cơ thể săn chắc gọn gàng. Thích không gian riêng tư, yên tĩnh thay vì tụ tập xô bồ.</div>
+            <div class="section-title">⚡ Phong cách sống & Thể chất</div>
+            <div class="section-desc">Rèn luyện thể thao đều đặn (gym, bơi lội), duy trì vóc dáng thon gọn săn chắc. Ưa chuộng không gian riêng tư, nhẹ nhàng thay vì tụ tập xô bồ.</div>
             <div class="check-item">
               <input type="checkbox" class="compat-check" id="c2">
               <label for="c2">Cùng gu thích không gian chill nhẹ nhàng, không xô bồ</label>
             </div>
             <div class="check-item">
               <input type="checkbox" class="compat-check" id="c3">
-              <label for="c3">Ủng hộ việc giữ lối sống lành mạnh, chăm sóc vóc dáng</label>
+              <label for="c3">Ủng hộ lối sống kỷ luật thể chất, gọn gàng và chăm sóc bản thân</label>
             </div>
           </div>
 
+          <!-- PHẦN 3: NGUYÊN TẮC HẸN HÒ -->
           <div class="section-box">
             <div class="section-title">🎯 Quan điểm kết nối & Hẹn hò</div>
-            <div class="section-desc">Ưu tiên giao tiếp chân thành, tôn trọng ranh giới của nhau. Thích những buổi trò chuyện sâu về góc nhìn cuộc sống hơn là những lời xã giao.</div>
+            <div class="section-desc">Ưu tiên giao tiếp chân thành, tôn trọng ranh giới và công việc của nhau. Thích những buổi trò chuyện sâu về nhân sinh quan hơn là những câu chuyện xã giao.</div>
             <div class="check-item">
               <input type="checkbox" class="compat-check" id="c4">
               <label for="c4">Thích trò chuyện thẳng thắn, không im lặng khi có khúc mắc</label>
@@ -341,12 +426,13 @@
             </div>
           </div>
 
+          <!-- PHẦN 4: GÓC RIÊNG TƯ / XHTD -->
           <div class="section-box" style="border-left: 4px solid var(--accent);">
             <div class="section-title">🔒 Góc riêng tư / Thân mật & XHTD</div>
             <div class="section-desc">Cần sự gắn kết cảm xúc và sự tin cậy nhất định trước khi bước vào những cử chỉ thân mật. Tôn trọng sự đồng thuận (consent) tuyệt đối, an toàn và chu đáo.</div>
             <div class="check-item">
               <input type="checkbox" class="compat-check" id="c6">
-              <label for="c6">Đồng điệu quan điểm: Cảm xúc gắn bó là nền tảng của sự thân mật</label>
+              <label for="c6">Đồng điệu: Cảm xúc gắn bó là nền tảng của sự thân mật</label>
             </div>
             <div class="check-item">
               <input type="checkbox" class="compat-check" id="c7">
@@ -354,16 +440,18 @@
             </div>
           </div>
 
-          <div style="margin-top: 8px;">
+          <!-- NÚT CHẤM ĐIỂM CHECKBOX -->
+          <div style="margin-top: 4px; margin-bottom: 24px;">
             <button class="calc-btn" onclick="calculateMatch()">Xem độ hợp nhau của tụi mình</button>
             <div id="matchResult" class="result-box">
               <div id="scoreDisplay" class="score-num">0%</div>
               <div id="scoreText" class="score-comment"></div>
             </div>
           </div>
-        </div>
+        </section>
       </div>
 
+      <!-- MODAL POP-UP TRẮC NGHIỆM -->
       <div id="quizModal" class="modal-overlay">
         <div class="quiz-card">
           <div class="quiz-header">
@@ -545,6 +633,15 @@
       localStorage.setItem("dating_quiz_scores", JSON.stringify(data));
     }
 
+    // ĐẶT LẠI ĐIỂM MỘT CHỦ ĐỀ: CHỈ RESET VỀ BAN ĐẦU, KHÔNG TỰ NHẢY VÀO GAME
+    function resetSingleTopicOnly(event, topicKey) {
+      event.stopPropagation(); // Ngăn sự kiện bấm nhầm vào nút mở game
+      const data = getStoredScores();
+      data[topicKey] = { score: null, replays: 0 };
+      localStorage.setItem("dating_quiz_scores", JSON.stringify(data));
+      showTopicMenu(); // Vẽ lại menu để hiện lại trạng thái "Chưa chơi"
+    }
+
     function resetAllScores() {
       localStorage.removeItem("dating_quiz_scores");
       showTopicMenu();
@@ -588,7 +685,7 @@
             <div style="display:flex; flex-direction:column; align-items:flex-end; gap:2px;">
               <div style="display:flex; align-items:center; gap:6px;">
                 <span style="color:#38ef7d; font-weight:700; font-size:0.85rem;">✅ ${item.score}/${QUIZ_DATA_HUB[key].questions.length}</span>
-                <button title="Chơi lại chủ đề này" style="background:#282d3f; border:1px solid #3e445b; color:#cbd5e1; border-radius:6px; padding:3px 7px; font-size:0.75rem; cursor:pointer;" onclick="startQuiz('${key}')">🔄</button>
+                <button title="Reset điểm phần này" style="background:#282d3f; border:1px solid #3e445b; color:#cbd5e1; border-radius:6px; padding:3px 7px; font-size:0.75rem; cursor:pointer;" onclick="resetSingleTopicOnly(event, '${key}')">🔄</button>
               </div>
               ${replayText}
             </div>
@@ -615,7 +712,7 @@
         <div id="topicMenu" style="display:flex; flex-direction:column; gap:10px;">
           ${summaryBlock}
           <p style="font-size:0.85rem; color:var(--text-dim); text-align:center; margin-bottom:2px;">
-            Chọn chủ đề để chơi hoặc bấm 🔄 để cải thiện điểm:
+            Chọn chủ đề để bắt đầu (bấm 🔄 để reset điểm):
           </p>
 
           <button class="quiz-opt-btn" style="display:flex; justify-content:space-between; align-items:center;" onclick="startQuiz('personality')">
