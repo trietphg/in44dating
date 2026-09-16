@@ -1,1 +1,112 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Private Profile</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --card-bg: #1a1d26;
+      --accent: #fd5068;
+      --accent-grad: linear-gradient(45deg, #ff6036, #fd5068);
+      --text: #ffffff;
+      --text-dim: #9aa0a6;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+    #lock-screen {
+      background: var(--card-bg);
+      padding: 32px 24px;
+      border-radius: 20px;
+      border: 1px solid #2a2e3d;
+      text-align: center;
+      max-width: 360px;
+      width: 100%;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    #lock-screen h2 { font-size: 1.3rem; margin-bottom: 8px; }
+    #lock-screen p { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 20px; }
+    .input-box { display: flex; flex-direction: column; gap: 12px; }
+    input[type="password"] {
+      width: 100%;
+      padding: 12px 16px;
+      background: #13151c;
+      border: 1px solid #363b4e;
+      border-radius: 10px;
+      color: white;
+      font-size: 1rem;
+      text-align: center;
+      outline: none;
+      letter-spacing: 2px;
+    }
+    input[type="password"]:focus { border-color: var(--accent); }
+    button.unlock-btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: var(--accent-grad);
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    #error-msg { color: #ff6b6b; font-size: 0.85rem; margin-top: 12px; display: none; }
+    #app { display: none; width: 100%; max-width: 400px; }
+  </style>
+</head>
+<body>
 
+  <div id="lock-screen">
+    <div style="font-size: 2.5rem; margin-bottom: 12px;">🔒</div>
+    <h2>Trang cá nhân giới hạn</h2>
+    <p>Nhập Passcode để mở khóa hồ sơ.</p>
+    <div class="input-box">
+      <input type="password" id="passInput" placeholder="Nhập Passcode..." autofocus onkeydown="if(event.key==='Enter') unlockSite()">
+      <button class="unlock-btn" onclick="unlockSite()">Mở khóa</button>
+    </div>
+    <div id="error-msg">Mật mã không đúng! Vui lòng thử lại.</div>
+  </div>
+
+  <main id="app"></main>
+
+  <script>
+    // Chuỗi mã hóa mẫu (Mật khẩu: 123456)
+    const ENCRYPTED_BODY = "U2FsdGVkX19P1l2c5vW1yQY0J3+jV5gXp1Z+7V/f8Qc4vJ3vj7U0Y3v+q+1e8c9V5d7V8a9b0c1d2e3f4g=="; 
+
+    function unlockSite() {
+      const pass = document.getElementById("passInput").value;
+      const errorMsg = document.getElementById("error-msg");
+      const lockScreen = document.getElementById("lock-screen");
+      const app = document.getElementById("app");
+
+      if (!pass) return;
+
+      try {
+        const bytes = CryptoJS.AES.decrypt(ENCRYPTED_BODY, pass);
+        const decryptedHTML = bytes.toString(CryptoJS.enc.Utf8);
+
+        if (decryptedHTML && decryptedHTML.length > 0) {
+          lockScreen.style.display = "none";
+          app.innerHTML = decryptedHTML;
+          app.style.display = "block";
+        } else {
+          errorMsg.style.display = "block";
+        }
+      } catch (err) {
+        errorMsg.style.display = "block";
+      }
+    }
+  </script>
+</body>
+</html>
