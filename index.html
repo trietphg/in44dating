@@ -380,11 +380,11 @@
         <!-- CỘT PHẢI CUỘN THÔNG TIN -->
         <section class="right-column">
           <div class="checklist-prompt">
-            💡 <strong>Tương tác cá nhân:</strong> Bấm trực tiếp vào các thẻ Tag hoặc tích vào các ô checklist bên dưới. Cuối trang sẽ xuất hiện <strong>Biểu đồ trọng số đồng điệu</strong> phân tích độ ăn ý theo từng khía cạnh!
+            💡 <strong>Tương tác cá nhân:</strong> Bấm tick chọn trực tiếp vào các ô bạn thấy đồng điệu. Cuối trang sẽ xuất hiện <strong>Biểu đồ trọng số đồng điệu</strong> phân tích độ ăn ý theo từng khía cạnh!
           </div>
 
-         <div class="checklist-prompt">
-            💡 <strong>Tương tác cá nhân:</strong> Bấm tick chọn trực tiếp vào các ô bạn thấy đồng điệu. Cuối trang sẽ xuất hiện <strong>Biểu đồ trọng số đồng điệu</strong> phân tích độ ăn ý theo từng khía cạnh!
+          <div class="checklist-prompt" style="border-color: #a29bfe; color: #cbd5e1; background: rgba(108, 92, 231, 0.1);">
+            💡 <strong>Lưu ý:</strong> Điểm số hay % đồng điệu chỉ mang tính chất tham khảo vui vẻ, sự bù trừ khác biệt đôi khi lại là điều tuyệt vời nhất.
           </div>
 
           <!-- NHÓM 1: GU & THẨM MỸ (CATEGORY: aesthetic) -->
@@ -504,19 +504,27 @@
             </div>
           </div>
 
-          <!-- NÚT SUBMIT & KẾT QUẢ BIỂU ĐỒ -->
-          <div style="margin-top: 4px; margin-bottom: 24px;">
+          <!-- NÚT SUBMIT & KẾT QUẢ BIỂU ĐỒ NÂNG CẤP HIỆU ỨNG -->
+          <div style="margin-top: 8px; margin-bottom: 24px;">
             <button class="calc-btn" onclick="calculateMatch()">Xem kết quả & Biểu đồ đồng điệu</button>
             
-            <div id="matchResult" class="result-box">
-              <div id="scoreDisplay" class="score-num">0%</div>
-              <div id="scoreText" class="score-comment"></div>
+            <div id="matchResult" class="result-box" style="display:none; background:rgba(26,29,38,0.9); border:1px solid rgba(253,80,104,0.4); padding:24px 18px; border-radius:20px; margin-top:14px; backdrop-filter:blur(12px); box-shadow:0 12px 35px rgba(253,80,104,0.15);">
+              
+              <!-- VÒNG TRÒN NEON ĐIỂM SỐ -->
+              <div style="width:110px; height:110px; margin:0 auto 12px; border-radius:50%; background:radial-gradient(circle, #251b2e 0%, #13151c 100%); border:3px solid var(--accent); display:flex; flex-direction:column; justify-content:center; align-items:center; box-shadow:0 0 20px rgba(253,80,104,0.4);">
+                <div id="scoreDisplay" style="font-size:2rem; font-weight:900; background:linear-gradient(45deg, #ff7675, #fd79a8, #fdcb6e); -webkit-background-clip:text; -webkit-text-fill-color:transparent; line-height:1;">0%</div>
+                <div style="font-size:0.7rem; color:#a29bfe; margin-top:4px; font-weight:700; letter-spacing:1px;">MATCH</div>
+              </div>
+
+              <div id="scoreDetailRatio" style="text-align:center; font-size:0.85rem; color:#94a3b8; margin-bottom:8px;"></div>
+              
+              <div id="scoreText" style="font-size:0.92rem; color:#e2e8f0; line-height:1.5; text-align:center; background:rgba(19,21,28,0.7); padding:12px 16px; border-radius:12px; border-left:3px solid var(--accent); margin:10px 0 16px;"></div>
 
               <!-- BIỂU ĐỒ TRỌNG SỐ ĐỒNG ĐIỆU CÁC NHÓM -->
               <div class="chart-container">
                 <div class="chart-title">
                   <span>📊 BIỂU ĐỒ TRỌNG SỐ ĐỒNG ĐIỆU</span>
-                  <span id="highestTrait" style="color:#38ef7d; font-size:0.8rem;"></span>
+                  <span id="highestTrait" style="color:#38ef7d; font-size:0.8rem; font-weight:700;"></span>
                 </div>
 
                 <!-- 1. Gu & Thẩm mỹ -->
@@ -617,7 +625,7 @@
       }
     }
 
-    // HÀM TÍNH TOÁN VÀ VẼ BIỂU ĐỒ TRỌNG SỐ TỪ CÁC Ô ĐÃ TICK
+    // HÀM TÍNH TOÁN VÀ VẼ BIỂU ĐỒ TRỌNG SỐ VỚI HIỆU ỨNG ĐẾM SỐ
     function calculateMatch() {
       const categories = {
         aesthetic: { name: "Gu Thẩm Mỹ", total: 0, checked: 0 },
@@ -626,7 +634,6 @@
         intimacy:  { name: "Thân Mật & Riêng Tư", total: 0, checked: 0 }
       };
 
-      // Quét tất cả các ô checkbox nằm trong các tag
       document.querySelectorAll('.compat-check').forEach(cb => {
         const cat = cb.getAttribute('data-cat');
         if (categories[cat]) {
@@ -647,7 +654,6 @@
         const ratio = item.total > 0 ? (item.checked / item.total) : 0;
         const percent = Math.round(ratio * 100);
 
-        // Cập nhật giá trị hiển thị trên thanh biểu đồ
         document.getElementById(`pct-${cat}`).innerText = `${percent}% (${item.checked}/${item.total})`;
         document.getElementById(`bar-${cat}`).style.width = `${percent}%`;
 
@@ -660,27 +666,46 @@
       const overallPercent = Math.round((grandChecked / grandTotal) * 100);
       const resultBox = document.getElementById('matchResult');
       const scoreDisplay = document.getElementById('scoreDisplay');
+      const scoreDetailRatio = document.getElementById('scoreDetailRatio');
       const scoreText = document.getElementById('scoreText');
       const highestTrait = document.getElementById('highestTrait');
 
-      scoreDisplay.innerText = `${overallPercent}% (${grandChecked}/${grandTotal} điểm đồng điệu)`;
+      scoreDetailRatio.innerText = `Đồng điệu ${grandChecked}/${grandTotal} tiêu chuẩn chung`;
 
       if (highestCategory) {
-        highestTrait.innerText = `🔥 Đồng điệu nhất ở: ${highestCategory}`;
+        highestTrait.innerText = `🔥 Tần số cao nhất: ${highestCategory}`;
       } else {
         highestTrait.innerText = "";
       }
 
       if (overallPercent >= 75) {
-        scoreText.innerText = "Tần số trùng khớp rất ấn tượng! Rất nhiều sở thích và góc nhìn tương đồng.";
+        scoreText.innerHTML = "✨ <strong>Tần số cực kỳ đồng điệu!</strong> Hai người có nhân sinh quan và gu sống chạm nhau ở hầu hết các khía cạnh.";
       } else if (overallPercent >= 45) {
-        scoreText.innerText = "Khá hài hòa ở các điểm cốt lõi. Những góc khác biệt sẽ là chủ đề trò chuyện rất cuốn hút.";
+        scoreText.innerHTML = "☕ <strong>Khá hài hòa ở các điểm cốt lõi.</strong> Những nét chấm phá đối lập còn lại chính là cái cớ hoàn hảo để trò chuyện.";
       } else {
-        scoreText.innerText = "Hai cá tính có nhiều nét bù trừ đối lập, đây lại là yếu tố tạo nên sự tò mò!";
+        scoreText.innerHTML = "🪐 <strong>Hai cực đối lập bù trừ!</strong> Sự khác biệt lớn thường tạo ra cảm giác tò mò và bất ngờ khi tìm hiểu.";
       }
 
       resultBox.style.display = "block";
       resultBox.scrollIntoView({ behavior: 'smooth' });
+
+      // HIỆU ỨNG SỐ NHẢY TỪ 0% ĐẾN KẾT QUẢ THỰC TẾ
+      let currentVal = 0;
+      scoreDisplay.innerText = "0%";
+      const duration = 1000;
+      const stepTime = 20;
+      const totalSteps = duration / stepTime;
+      const increment = overallPercent / totalSteps;
+
+      const counterTimer = setInterval(() => {
+        currentVal += increment;
+        if (currentVal >= overallPercent) {
+          clearInterval(counterTimer);
+          scoreDisplay.innerText = overallPercent + "%";
+        } else {
+          scoreDisplay.innerText = Math.floor(currentVal) + "%";
+        }
+      }, stepTime);
     }
 
     const QUIZ_DATA_HUB = {
