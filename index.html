@@ -202,6 +202,40 @@
       height: 17px;
     }
 
+    /* NÚT XEM KẾT QUẢ HIỆU ỨNG GLOW NEON TINDER */
+    .calc-btn {
+      width: 100%;
+      padding: 16px 20px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #ff6036 0%, #fd5068 50%, #ff3377 100%);
+      color: #ffffff;
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 8px 25px rgba(253, 80, 104, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .calc-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(253, 80, 104, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+      filter: brightness(1.08);
+    }
+
+    .calc-btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 4px 15px rgba(253, 80, 104, 0.4);
+    }
+
     /* KHUNG BIỂU ĐỒ TRỌNG SỐ ĐỒNG ĐIỆU */
     .chart-container {
       margin-top: 16px;
@@ -506,7 +540,9 @@
 
           <!-- NÚT SUBMIT & KẾT QUẢ BIỂU ĐỒ NÂNG CẤP HIỆU ỨNG -->
           <div style="margin-top: 8px; margin-bottom: 24px;">
-            <button class="calc-btn" onclick="calculateMatch()">Xem kết quả & Biểu đồ đồng điệu</button>
+            <button class="calc-btn" onclick="calculateMatch()">
+              <span>✨ Xem mình đồng điệu bao nhiêu & Biểu đồ 📊</span>
+            </button>
             
             <div id="matchResult" class="result-box" style="display:none; background:rgba(26,29,38,0.9); border:1px solid rgba(253,80,104,0.4); padding:24px 18px; border-radius:20px; margin-top:14px; backdrop-filter:blur(12px); box-shadow:0 12px 35px rgba(253,80,104,0.15);">
               
