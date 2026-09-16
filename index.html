@@ -37,20 +37,48 @@
     }
     #lock-screen h2 { font-size: 1.3rem; margin-bottom: 8px; }
     #lock-screen p { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 20px; }
-    .input-box { display: flex; flex-direction: column; gap: 12px; }
-    input[type="password"] {
+    
+    .input-box {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Ô NHẬP PASS VÀ ICON CON MẮT */
+    .password-wrapper {
+      position: relative;
       width: 100%;
-      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+    }
+    input#passInput {
+      width: 100%;
+      padding: 12px 42px 12px 16px;
       background: #13151c;
       border: 1px solid #363b4e;
       border-radius: 10px;
       color: white;
       font-size: 1rem;
-      text-align: center;
       outline: none;
-      letter-spacing: 2px;
+      transition: border-color 0.2s;
     }
-    input[type="password"]:focus { border-color: var(--accent); }
+    input#passInput:focus { border-color: var(--accent); }
+    
+    .eye-btn {
+      position: absolute;
+      right: 12px;
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+    }
+    .eye-btn:hover { color: #fff; }
+    .eye-btn svg { width: 20px; height: 20px; fill: currentColor; }
+
     button.unlock-btn {
       width: 100%;
       padding: 12px;
@@ -61,8 +89,24 @@
       font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
+      transition: opacity 0.2s;
     }
-    #error-msg { color: #ff6b6b; font-size: 0.85rem; margin-top: 12px; display: none; }
+    button.unlock-btn:hover { opacity: 0.9; }
+
+    #error-msg {
+      color: #ff6b6b;
+      font-size: 0.85rem;
+      margin-top: 10px;
+      display: none;
+      animation: shake 0.3s ease-in-out;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
     #app { display: none; width: 100%; max-width: 440px; }
   </style>
 </head>
@@ -71,23 +115,54 @@
   <!-- MÀN HÌNH KHÓA -->
   <div id="lock-screen">
     <div style="font-size: 2.5rem; margin-bottom: 12px;">🔒</div>
-    <h2>Trang cá nhân giới hạn</h2>
+    <h2>Trang thông tin hẹn hò của tui, hạn chế truy cập</h2>
     <p>Nhập Passcode để mở khóa toàn bộ hồ sơ.</p>
+    
     <div class="input-box">
-      <input type="password" id="passInput" placeholder="Nhập Passcode..." autofocus onkeydown="if(event.key==='Enter') unlockSite()">
+      <div class="password-wrapper">
+        <input type="password" id="passInput" placeholder="Nhập Passcode..." autofocus onkeydown="if(event.key==='Enter') unlockSite()">
+        <button type="button" class="eye-btn" onclick="togglePasswordVisibility()" aria-label="Hiện/Ẩn mật mã">
+          <!-- Icon mắt mở -->
+          <svg id="eye-icon-open" viewBox="0 0 24 24">
+            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zm0 12.5c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+          </svg>
+          <!-- Icon mắt gạch chéo (ẩn) -->
+          <svg id="eye-icon-closed" style="display: none;" viewBox="0 0 24 24">
+            <path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.44-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.17c0-1.66-1.34-3-3-3l-.17.02z"/>
+          </svg>
+        </button>
+      </div>
+
       <button class="unlock-btn" onclick="unlockSite()">Mở khóa hồ sơ</button>
     </div>
-    <div id="error-msg">Mật mã không chính xác! Vui lòng thử lại.</div>
+
+    <div id="error-msg"></div>
   </div>
 
-  <!-- NƠI NỘI DUNG GIẢI MÃ HIỂN THỊ -->
+  <!-- VÙNG HIỂN THỊ HỒ SƠ SAU KHI GIẢI MÃ -->
   <main id="app"></main>
 
   <script>
-    // Dữ liệu giao diện HTML đã được mã hóa bằng AES với Passcode: noinaycotui
-    const ENCRYPTED_BODY = "U2FsdGVkX19O0E27UjYc5W+z9TjG7Fz2iKk0P6KqP6V9L2n8C4Y3Z5a1b7c9d0e1f2g3h4i5j6k7l8m9n0o1p2q3r4s5t6u7v8w9x0y1z2A3B4C5D6E7F8G9H0I1J2K3L4M5N6O7P8Q9R0S1T2U3V4W5X6Y7Z8";
+    let failedAttempts = 0;
 
-    // Nội dung nguồn đầy đủ các trường thông tin và chức năng chấm điểm
+    // Bật/tắt xem mật mã
+    function togglePasswordVisibility() {
+      const passInput = document.getElementById("passInput");
+      const iconOpen = document.getElementById("eye-icon-open");
+      const iconClosed = document.getElementById("eye-icon-closed");
+
+      if (passInput.type === "password") {
+        passInput.type = "text";
+        iconOpen.style.display = "none";
+        iconClosed.style.display = "block";
+      } else {
+        passInput.type = "password";
+        iconOpen.style.display = "block";
+        iconClosed.style.display = "none";
+      }
+    }
+
+    // Nội dung HTML giao diện Tinder đầy đủ các trường
     const RAW_HTML = `
       <style>
         .profile-container {
@@ -246,12 +321,11 @@
         </div>
 
         <div class="content-body">
-          <!-- 1. THÔNG BÁO HƯỚNG DẪN CHECKPOINT -->
           <div class="checklist-prompt">
             💡 <strong>Interactive Check:</strong> Khi đọc từng mục dưới đây, nếu thấy đồng điệu hoặc cùng tần số, hãy tích vào ô checkbox. Cuối trang sẽ có nút chấm điểm tương thích giữa hai ta!
           </div>
 
-          <!-- 2. TỔNG QUAN & BIO -->
+          <!-- TỔNG QUAN & BIO -->
           <div class="section-box">
             <div class="section-title">👤 Tổng quan bản thân</div>
             <div class="section-desc">
@@ -259,7 +333,7 @@
             </div>
             <div class="tag-list">
               <span class="tag-item">📍 TP. Hồ Chí Minh</span>
-              <span class="tag-item">☕ Rang mộc</span>
+              <span class="tag-item">☕ Cà phê Việt Nam</span>
               <span class="tag-item">🎶 Indie & Trữ tình</span>
               <span class="tag-item">⚖️ Pháp lý & Tư duy</span>
             </div>
@@ -269,7 +343,7 @@
             </div>
           </div>
 
-          <!-- 3. PHONG CÁCH SỐNG & THÓI QUEN -->
+          <!-- PHONG CÁCH SỐNG & THÓI QUEN -->
           <div class="section-box">
             <div class="section-title">⚡ Phong cách sống & Thói quen</div>
             <div class="section-desc">
@@ -285,7 +359,7 @@
             </div>
           </div>
 
-          <!-- 4. GU & NGUYÊN TẮC HẸN HÒ -->
+          <!-- QUAN ĐIỂM HẸN HÒ -->
           <div class="section-box">
             <div class="section-title">🎯 Quan điểm kết nối & Hẹn hò</div>
             <div class="section-desc">
@@ -301,7 +375,7 @@
             </div>
           </div>
 
-          <!-- 5. GÓC RIÊNG TƯ / XU HƯỚNG TÌNH DỤC & THÂN MẬT -->
+          <!-- GÓC RIÊNG TƯ / XU HƯỚNG TÌNH DỤC & THÂN MẬT -->
           <div class="section-box" style="border-left: 4px solid #fd5068;">
             <div class="section-title">🔒 Góc riêng tư / Thân mật & XHTD</div>
             <div class="section-desc">
@@ -317,7 +391,7 @@
             </div>
           </div>
 
-          <!-- 6. NÚT CHẤM ĐIỂM HỢP NHAU -->
+          <!-- NÚT CHẤM ĐIỂM -->
           <div class="submit-area">
             <button class="calc-btn" onclick="calculateMatch()">Xem độ hợp nhau của tụi mình</button>
             <div id="matchResult" class="result-box">
@@ -329,7 +403,7 @@
       </div>
     `;
 
-    // Giải mã bằng AES với mật khẩu
+    // Mở khóa bằng pass
     function unlockSite() {
       const pass = document.getElementById("passInput").value.trim();
       const errorMsg = document.getElementById("error-msg");
@@ -342,11 +416,18 @@
         app.style.display = "block";
         errorMsg.style.display = "none";
       } else {
+        failedAttempts++;
+        errorMsg.innerText = `Bạn đã nhập sai lần thứ ${failedAttempts}!`;
         errorMsg.style.display = "block";
+        
+        // Kích hoạt lại hiệu ứng rung lắc
+        errorMsg.style.animation = 'none';
+        errorMsg.offsetHeight; 
+        errorMsg.style.animation = 'shake 0.3s ease-in-out';
       }
     }
 
-    // Logic tính điểm tương thích
+    // Tính điểm tương thích
     function calculateMatch() {
       const checkboxes = document.querySelectorAll('.compat-check');
       const total = checkboxes.length;
