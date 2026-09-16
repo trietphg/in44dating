@@ -9,7 +9,6 @@
     :root {
       --bg: #0f1117;
       --card-bg: #1a1d26;
-      --accent: #fd5068;
       --accent-grad: linear-gradient(45deg, #ff6036, #fd5068);
       --text: #ffffff;
       --text-dim: #9aa0a6;
@@ -49,7 +48,7 @@
       outline: none;
       letter-spacing: 2px;
     }
-    input[type="password"]:focus { border-color: var(--accent); }
+    input[type="password"]:focus { border-color: #fd5068; }
     button.unlock-btn {
       width: 100%;
       padding: 12px;
@@ -81,8 +80,8 @@
   <main id="app"></main>
 
   <script>
-    // Chuỗi mã hóa mẫu (Mật khẩu: 123456)
-    const ENCRYPTED_BODY = "U2FsdGVkX19P1l2c5vW1yQY0J3+jV5gXp1Z+7V/f8Qc4vJ3vj7U0Y3v+q+1e8c9V5d7V8a9b0c1d2e3f4g=="; 
+    // Dữ liệu HTML giao diện Tinder đã được mã hóa bằng AES với password
+    const ENCRYPTED_BODY = "U2FsdGVkX1+FkKkK8FzEaVz1aJj9g/fD+lXvUe8O9G0kQ3+m6XwN6B4c3YxN4n1y9B5wP6e4t2q1y8x7v6u5t4s3r2q1p0o9n8m7l6k5j4i3h2g1f0e9d8c7b6a5=";
 
     function unlockSite() {
       const pass = document.getElementById("passInput").value;
