@@ -26,7 +26,6 @@
       padding: 16px;
     }
 
-    /* MÀN HÌNH KHÓA BAN ĐẦU */
     #lock-screen {
       background: var(--card-bg);
       padding: 32px 24px;
@@ -96,8 +95,7 @@
       40%, 80% { transform: translateX(6px); }
     }
 
-    /* BỐ CỤC KHUNG HỒ SƠ CHÍNH */
-    #app { display: none; width: 100%; max-width: 900px; margin: auto; }
+    #app { display: none; width: 100%; max-width: 920px; margin: auto; }
     .profile-layout {
       display: flex;
       flex-direction: column;
@@ -105,7 +103,6 @@
       width: 100%;
     }
 
-    /* RESPONSIVE TRÊN LAPTOP / MÀN HÌNH LỚN (> 850px) */
     @media (min-width: 850px) {
       .profile-layout {
         display: grid;
@@ -122,14 +119,12 @@
         overflow-y: auto;
         padding-right: 8px;
       }
-      /* Tùy chỉnh thanh cuộn bên phải */
       .right-column::-webkit-scrollbar { width: 6px; }
       .right-column::-webkit-scrollbar-track { background: #13151c; border-radius: 4px; }
       .right-column::-webkit-scrollbar-thumb { background: #363b4e; border-radius: 4px; }
       .right-column::-webkit-scrollbar-thumb:hover { background: var(--accent); }
     }
 
-    /* THẺ THÔNG TIN CỐ ĐỊNH BÊN TRÁI */
     .identity-card {
       background: var(--card-bg);
       border-radius: 20px;
@@ -155,7 +150,6 @@
     .id-label { color: var(--text-dim); }
     .id-val { font-weight: 600; color: #f1f5f9; text-align: right; }
 
-    /* CỘT NỘI DUNG CUỘN BÊN PHẢI */
     .right-column {
       display: flex;
       flex-direction: column;
@@ -168,20 +162,40 @@
       padding: 16px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
       box-shadow: 0 6px 20px rgba(0,0,0,0.2);
     }
     .section-title { font-size: 0.95rem; font-weight: 700; color: #ff7b90; display: flex; align-items: center; gap: 6px; }
     .section-desc { font-size: 0.88rem; color: #d0d4dc; line-height: 1.5; }
-    .tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
-    .tag-item {
-      background: #262a38;
+    
+    /* TAGS CÓ THỂ TICK CHỌN TRỰC TIẾP */
+    .tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+    .tag-check {
+      background: #202433;
       border: 1px solid #363b4e;
-      padding: 4px 10px;
-      border-radius: 8px;
-      font-size: 0.78rem;
-      color: #e2e8f0;
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-size: 0.82rem;
+      color: #cbd5e1;
+      cursor: pointer;
+      user-select: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
     }
+    .tag-check:hover {
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .tag-check.active {
+      background: rgba(253, 80, 104, 0.18);
+      border-color: var(--accent);
+      color: #ff94a4;
+      font-weight: 600;
+      box-shadow: 0 0 10px rgba(253, 80, 104, 0.25);
+    }
+
     .checklist-prompt {
       background: rgba(253, 80, 104, 0.1);
       border: 1px dashed var(--accent);
@@ -222,15 +236,47 @@
       display: none;
       background: #18222d;
       border: 1px solid #2e4760;
-      padding: 16px;
-      border-radius: 12px;
-      text-align: center;
-      margin-top: 8px;
+      padding: 18px;
+      border-radius: 14px;
+      margin-top: 10px;
     }
-    .score-num { font-size: 1.8rem; font-weight: 800; color: #38ef7d; margin-bottom: 4px; }
-    .score-comment { font-size: 0.85rem; color: #94a3b8; line-height: 1.4; }
+    .score-num { font-size: 1.9rem; font-weight: 800; color: #38ef7d; text-align: center; }
+    .score-comment { font-size: 0.85rem; color: #94a3b8; line-height: 1.4; text-align: center; margin-top: 4px; }
 
-    /* NÚT VÀ GIAO DIỆN MODAL GAME HUB */
+    /* KHUNG BIỂU ĐỒ TRỌNG SỐ ĐỒNG ĐIỆU */
+    .chart-container {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px dashed #2f455d;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .chart-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #a29bfe;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .bar-item { display: flex; flex-direction: column; gap: 4px; }
+    .bar-info { display: flex; justify-content: space-between; font-size: 0.8rem; color: #cbd5e1; }
+    .bar-track {
+      width: 100%;
+      height: 10px;
+      background: #111822;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid #233446;
+    }
+    .bar-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 6px;
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
     .quiz-launcher-btn {
       width: 100%;
       padding: 14px;
@@ -292,7 +338,6 @@
 </head>
 <body>
 
-  <!-- MÀN HÌNH KHÓA BAN ĐẦU -->
   <div id="lock-screen">
     <div style="font-size: 2.5rem; margin-bottom: 12px;">🔒</div>
     <h2>Trang cá nhân giới hạn</h2>
@@ -311,7 +356,6 @@
     <div id="error-msg"></div>
   </div>
 
-  <!-- NƠI CHỨA HỒ SƠ 2 CỘT SAU MỞ KHÓA -->
   <main id="app"></main>
 
   <script>
@@ -332,11 +376,10 @@
       }
     }
 
-    // BỐ CỤC GIAO DIỆN 2 CỘT (DESKTOP) HOẶC 1 CỘT (MOBILE)
     const RAW_HTML = `
       <div class="profile-layout">
         
-        <!-- CỘT TRÁI: THÔNG TIN CĂN CƯỚC CỐ ĐỊNH & NÚT MỞ GAME HUB -->
+        <!-- CỘT TRÁI CỐ ĐỊNH -->
         <aside class="left-column">
           <div class="identity-card">
             <div class="cover-photo">
@@ -368,7 +411,6 @@
                 <span class="id-val" style="color:#38ef7d;">Đang tìm hiểu ✨</span>
               </div>
 
-              <!-- NÚT MỞ TRÒ CHƠI NẰM CỐ ĐỊNH NGAY DƯỚI THẺ CĂN CƯỚC -->
               <button class="quiz-launcher-btn" style="margin-top:6px;" onclick="openQuizModal()">
                 🎮 Mini-Game: Thử Độ Ăn Ý
               </button>
@@ -376,82 +418,151 @@
           </div>
         </aside>
 
-        <!-- CỘT PHẢI: CHI TIẾT SỞ THÍCH, NGUYÊN TẮC & CHECKBOX TƯƠNG THÍCH -->
+        <!-- CỘT PHẢI CUỘN THÔNG TIN -->
         <section class="right-column">
           <div class="checklist-prompt">
-            💡 <strong>Interactive Check:</strong> Đọc từng phần dưới đây, nếu thấy đồng điệu hoặc cùng tần số, hãy tích vào ô checkbox. Cuối trang có nút chấm điểm tương thích của hai ta!
+            💡 <strong>Tương tác cá nhân:</strong> Bấm trực tiếp vào các thẻ Tag hoặc tích vào các ô checklist bên dưới. Cuối trang sẽ xuất hiện <strong>Biểu đồ trọng số đồng điệu</strong> phân tích độ ăn ý theo từng khía cạnh!
           </div>
 
-          <!-- PHẦN 1: GIỚI THIỆU CHUNG -->
+          <!-- NHÓM 1: GU & THẨM MỸ (CATEGORY: aesthetic) -->
           <div class="section-box">
-            <div class="section-title">👤 Tổng quan bản thân</div>
-            <div class="section-desc">Kỷ luật, thích sự rõ ràng và chiều sâu. Quan tâm đến kiến trúc, tư duy pháp lý, âm nhạc và những buổi dạo phố đêm tĩnh lặng.</div>
+            <div class="section-title">🎨 Gu thẩm mỹ & Sở thích riêng</div>
+            <div class="section-desc">Những điều mang lại cảm hứng sáng tạo và sự thư thái. Bấm chọn những tag bạn cùng chia sẻ sự hứng thú:</div>
             <div class="tag-list">
-              <span class="tag-item">☕ Cà phê rang mộc</span>
-              <span class="tag-item">🎶 Indie & Trữ tình</span>
-              <span class="tag-item">⚖️ Pháp lý & Tư duy</span>
-              <span class="tag-item">🏛️ Kiến trúc</span>
+              <div class="tag-check" data-cat="aesthetic" onclick="toggleTag(this)">☕ Cà phê rang mộc</div>
+              <div class="tag-check" data-cat="aesthetic" onclick="toggleTag(this)">🏛️ Kiến trúc & Không gian</div>
+              <div class="tag-check" data-cat="aesthetic" onclick="toggleTag(this)">🎶 Indie & Trữ tình</div>
+              <div class="tag-check" data-cat="aesthetic" onclick="toggleTag(this)">🌃 Dạo phố đêm Sài Gòn</div>
             </div>
             <div class="check-item">
-              <input type="checkbox" class="compat-check" id="c1">
-              <label for="c1">Thích người sống kỷ luật, tư duy rõ ràng và biết quan tâm</label>
+              <input type="checkbox" class="compat-check" data-cat="aesthetic" id="a1">
+              <label for="a1">Thích cùng nhau ngồi quán cà phê yên tĩnh trò chuyện về nghệ thuật / thiết kế</label>
             </div>
           </div>
 
-          <!-- PHẦN 2: PHONG CÁCH SỐNG & THỂ CHẤT -->
+          <!-- NHÓM 2: LỐI SỐNG & THỂ CHẤT (CATEGORY: lifestyle) -->
           <div class="section-box">
-            <div class="section-title">⚡ Phong cách sống & Thể chất</div>
-            <div class="section-desc">Rèn luyện thể thao đều đặn (gym, bơi lội), duy trì vóc dáng thon gọn săn chắc. Ưa chuộng không gian riêng tư, nhẹ nhàng thay vì tụ tập xô bồ.</div>
-            <div class="check-item">
-              <input type="checkbox" class="compat-check" id="c2">
-              <label for="c2">Cùng gu thích không gian chill nhẹ nhàng, không xô bồ</label>
+            <div class="section-title">⚡ Lối sống, Thể chất & Kỷ luật</div>
+            <div class="section-desc">Rèn luyện thể thao đều đặn (gym, bơi lội), duy trì cơ thể săn chắc gọn gàng. Chọn những điều cùng tần số với bạn:</div>
+            <div class="tag-list">
+              <div class="tag-check" data-cat="lifestyle" onclick="toggleTag(this)">🏋️ Kỷ luật Gym / Fitness</div>
+              <div class="tag-check" data-cat="lifestyle" onclick="toggleTag(this)">🏊 Bơi lội thư giãn</div>
+              <div class="tag-check" data-cat="lifestyle" onclick="toggleTag(this)">🌿 Không gian riêng tư</div>
             </div>
             <div class="check-item">
-              <input type="checkbox" class="compat-check" id="c3">
-              <label for="c3">Ủng hộ lối sống kỷ luật thể chất, gọn gàng và chăm sóc bản thân</label>
+              <input type="checkbox" class="compat-check" data-cat="lifestyle" id="l1">
+              <label for="l1">Cùng gu thích không gian chill nhẹ nhàng, không xô bồ</label>
+            </div>
+            <div class="check-item">
+              <input type="checkbox" class="compat-check" data-cat="lifestyle" id="l2">
+              <label for="l2">Ủng hộ lối sống kỷ luật thể chất, giữ gìn vóc dáng thon gọn</label>
             </div>
           </div>
 
-          <!-- PHẦN 3: NGUYÊN TẮC HẸN HÒ -->
+          <!-- NHÓM 3: TƯ DUY & GIÁ TRỊ SỐNG (CATEGORY: mindset) -->
           <div class="section-box">
-            <div class="section-title">🎯 Quan điểm kết nối & Hẹn hò</div>
-            <div class="section-desc">Ưu tiên giao tiếp chân thành, tôn trọng ranh giới và công việc của nhau. Thích những buổi trò chuyện sâu về nhân sinh quan hơn là những câu chuyện xã giao.</div>
-            <div class="check-item">
-              <input type="checkbox" class="compat-check" id="c4">
-              <label for="c4">Thích trò chuyện thẳng thắn, không im lặng khi có khúc mắc</label>
+            <div class="section-title">⚖️ Tư duy & Nguyên tắc hẹn hò</div>
+            <div class="section-desc">Ưu tiên giao tiếp chân thành, tôn trọng ranh giới và công việc của nhau:</div>
+            <div class="tag-list">
+              <div class="tag-check" data-cat="mindset" onclick="toggleTag(this)">📜 Tư duy Pháp lý & Logic</div>
+              <div class="tag-check" data-cat="mindset" onclick="toggleTag(this)">🎯 Tôn trọng ranh giới</div>
+              <div class="tag-check" data-cat="mindset" onclick="toggleTag(this)">💬 Trò chuyện thẳng thắn</div>
             </div>
             <div class="check-item">
-              <input type="checkbox" class="compat-check" id="c5">
-              <label for="c5">Tôn trọng không gian riêng tư và mục tiêu cá nhân của nhau</label>
+              <input type="checkbox" class="compat-check" data-cat="mindset" id="m1">
+              <label for="m1">Thích người sống kỷ luật, tư duy rõ ràng và biết quan tâm</label>
+            </div>
+            <div class="check-item">
+              <input type="checkbox" class="compat-check" data-cat="mindset" id="m2">
+              <label for="m2">Thích giải quyết hiểu lầm bằng sự thẳng thắn, không im lặng</label>
             </div>
           </div>
 
-          <!-- PHẦN 4: GÓC RIÊNG TƯ / XHTD -->
+          <!-- NHÓM 4: GÓC RIÊNG TƯ & THÂN MẬT (CATEGORY: intimacy) -->
           <div class="section-box" style="border-left: 4px solid var(--accent);">
-            <div class="section-title">🔒 Góc riêng tư / Thân mật & XHTD</div>
-            <div class="section-desc">Cần sự gắn kết cảm xúc và sự tin cậy nhất định trước khi bước vào những cử chỉ thân mật. Tôn trọng sự đồng thuận (consent) tuyệt đối, an toàn và chu đáo.</div>
-            <div class="check-item">
-              <input type="checkbox" class="compat-check" id="c6">
-              <label for="c6">Đồng điệu: Cảm xúc gắn bó là nền tảng của sự thân mật</label>
+            <div class="section-title">🔒 Góc riêng tư / Thân mật & XHTD (18+)</div>
+            <div class="section-desc">Cần sự gắn kết cảm xúc và sự tin cậy nhất định trước khi bước vào những cử chỉ thân mật. Tôn trọng sự đồng thuận (consent) tuyệt đối, an toàn và chu đáo:</div>
+            <div class="tag-list">
+              <div class="tag-check" data-cat="intimacy" onclick="toggleTag(this)">💖 Cảm xúc đi trước thể xác</div>
+              <div class="tag-check" data-cat="intimacy" onclick="toggleTag(this)">🛡️ An toàn & Consent</div>
+              <div class="tag-check" data-cat="intimacy" onclick="toggleTag(this)">🤫 Kín đáo & Tinh tế</div>
             </div>
             <div class="check-item">
-              <input type="checkbox" class="compat-check" id="c7">
-              <label for="c7">Thoải mái trò chuyện cởi mở về mong muốn và giới hạn của nhau</label>
+              <input type="checkbox" class="compat-check" data-cat="intimacy" id="i1">
+              <label for="i1">Đồng điệu: Cảm xúc gắn bó là nền tảng của mọi sự thân mật</label>
+            </div>
+            <div class="check-item">
+              <input type="checkbox" class="compat-check" data-cat="intimacy" id="i2">
+              <label for="i2">Thoải mái trò chuyện cởi mở về mong muốn và giới hạn của nhau</label>
             </div>
           </div>
 
-          <!-- NÚT CHẤM ĐIỂM CHECKBOX -->
+          <!-- NÚT SUBMIT & KẾT QUẢ BIỂU ĐỒ -->
           <div style="margin-top: 4px; margin-bottom: 24px;">
-            <button class="calc-btn" onclick="calculateMatch()">Xem độ hợp nhau của tụi mình</button>
+            <button class="calc-btn" onclick="calculateMatch()">Xem kết quả & Biểu đồ đồng điệu</button>
+            
             <div id="matchResult" class="result-box">
               <div id="scoreDisplay" class="score-num">0%</div>
               <div id="scoreText" class="score-comment"></div>
+
+              <!-- BIỂU ĐỒ TRỌNG SỐ ĐỒNG ĐIỆU CÁC NHÓM -->
+              <div class="chart-container">
+                <div class="chart-title">
+                  <span>📊 BIỂU ĐỒ TRỌNG SỐ ĐỒNG ĐIỆU</span>
+                  <span id="highestTrait" style="color:#38ef7d; font-size:0.8rem;"></span>
+                </div>
+
+                <!-- 1. Gu & Thẩm mỹ -->
+                <div class="bar-item">
+                  <div class="bar-info">
+                    <span>🎨 Gu Thẩm Mỹ (Kiến trúc, Nhạc, Cà phê)</span>
+                    <span id="pct-aesthetic">0%</span>
+                  </div>
+                  <div class="bar-track">
+                    <div id="bar-aesthetic" class="bar-fill" style="background:linear-gradient(90deg, #ff7675, #d63031);"></div>
+                  </div>
+                </div>
+
+                <!-- 2. Lối sống & Thể chất -->
+                <div class="bar-item">
+                  <div class="bar-info">
+                    <span>⚡ Lối Sống & Kỷ Luật Thể Chất</span>
+                    <span id="pct-lifestyle">0%</span>
+                  </div>
+                  <div class="bar-track">
+                    <div id="bar-lifestyle" class="bar-fill" style="background:linear-gradient(90deg, #fdcb6e, #e17055);"></div>
+                  </div>
+                </div>
+
+                <!-- 3. Tư duy & Nguyên tắc -->
+                <div class="bar-item">
+                  <div class="bar-info">
+                    <span>⚖️ Tư Duy, Pháp Lý & Nguyên Tắc Hẹn Hò</span>
+                    <span id="pct-mindset">0%</span>
+                  </div>
+                  <div class="bar-track">
+                    <div id="bar-mindset" class="bar-fill" style="background:linear-gradient(90deg, #74b9ff, #0984e3);"></div>
+                  </div>
+                </div>
+
+                <!-- 4. Riêng tư & Thân mật -->
+                <div class="bar-item">
+                  <div class="bar-info">
+                    <span>🔒 Thân Mật, Cảm Xúc & XHTD</span>
+                    <span id="pct-intimacy">0%</span>
+                  </div>
+                  <div class="bar-track">
+                    <div id="bar-intimacy" class="bar-fill" style="background:linear-gradient(90deg, #a29bfe, #6c5ce7);"></div>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
         </section>
       </div>
 
-      <!-- MODAL POP-UP TRẮC NGHIỆM -->
+      <!-- MODAL GAME HUB -->
       <div id="quizModal" class="modal-overlay">
         <div class="quiz-card">
           <div class="quiz-header">
@@ -488,27 +599,81 @@
       }
     }
 
-    function calculateMatch() {
-      const checkboxes = document.querySelectorAll('.compat-check');
-      const total = checkboxes.length;
-      let checkedCount = 0;
+    // BẬT/TẮT CHỌN TAG TRỰC TIẾP
+    function toggleTag(el) {
+      el.classList.toggle('active');
+    }
 
-      checkboxes.forEach(cb => {
-        if (cb.checked) checkedCount++;
+    // TÍNH ĐIỂM TỔNG VÀ VẼ BIỂU ĐỒ TRỌNG SỐ TỪNG NHÓM
+    function calculateMatch() {
+      const categories = {
+        aesthetic: { name: "Gu Thẩm Mỹ", total: 0, checked: 0 },
+        lifestyle: { name: "Lối Sống Thể Chất", total: 0, checked: 0 },
+        mindset:   { name: "Tư Duy & Giá Trị", total: 0, checked: 0 },
+        intimacy:  { name: "Thân Mật & Riêng Tư", total: 0, checked: 0 }
+      };
+
+      // 1. Quét toàn bộ thẻ tag tương tác
+      document.querySelectorAll('.tag-check').forEach(tag => {
+        const cat = tag.getAttribute('data-cat');
+        if (categories[cat]) {
+          categories[cat].total++;
+          if (tag.classList.contains('active')) categories[cat].checked++;
+        }
       });
 
-      const percent = Math.round((checkedCount / total) * 100);
+      // 2. Quét toàn bộ ô checkbox
+      document.querySelectorAll('.compat-check').forEach(cb => {
+        const cat = cb.getAttribute('data-cat');
+        if (categories[cat]) {
+          categories[cat].total++;
+          if (cb.checked) categories[cat].checked++;
+        }
+      });
+
+      // 3. Tính điểm tổng
+      let grandTotal = 0;
+      let grandChecked = 0;
+      let highestCategory = "";
+      let highestRatio = -1;
+
+      Object.keys(categories).forEach(cat => {
+        const item = categories[cat];
+        grandTotal += item.total;
+        grandChecked += item.checked;
+        const ratio = item.total > 0 ? (item.checked / item.total) : 0;
+        const percent = Math.round(ratio * 100);
+
+        // Cập nhật thanh biểu đồ
+        document.getElementById(`pct-${cat}`).innerText = `${percent}% (${item.checked}/${item.total})`;
+        document.getElementById(`bar-${cat}`).style.width = `${percent}%`;
+
+        if (ratio > highestRatio && item.checked > 0) {
+          highestRatio = ratio;
+          highestCategory = item.name;
+        }
+      });
+
+      const overallPercent = Math.round((grandChecked / grandTotal) * 100);
       const resultBox = document.getElementById('matchResult');
       const scoreDisplay = document.getElementById('scoreDisplay');
       const scoreText = document.getElementById('scoreText');
+      const highestTrait = document.getElementById('highestTrait');
 
-      scoreDisplay.innerText = percent + "% (" + checkedCount + "/" + total + " điểm)";
-      if (percent >= 80) {
-        scoreText.innerText = "Tần số trùng khớp đáng kinh ngạc! Rất nhiều điểm chung về tư duy và lối sống.";
-      } else if (percent >= 50) {
-        scoreText.innerText = "Khá tương đồng ở những điểm mấu chốt. Những góc khác biệt sẽ là đề tài trò chuyện rất cuốn hút.";
+      scoreDisplay.innerText = `${overallPercent}% (${grandChecked}/${grandTotal} điểm đồng điệu)`;
+
+      if (highestCategory) {
+        highestTrait.innerText = `🔥 Đồng điệu nhất ở: ${highestCategory}`;
       } else {
-        scoreText.innerText = "Hai thế giới có vẻ khá đối lập, nhưng bù trừ cho nhau lại tạo nên sức hút lạ!";
+        highestTrait.innerText = "";
+      }
+
+      if (overallPercent >= 75) {
+        scoreText.innerText = "Tần số trùng khớp rất ấn tượng! Rất nhiều sở thích và góc nhìn tương đồng.";
+      } else if (overallPercent >= 45) {
+        scoreText.innerText = "Khá hài hòa ở các điểm cốt lõi. Những góc khác biệt sẽ là chủ đề trò chuyện rất cuốn hút.";
+      } else {
+        scoreText.innerText = "Hai cá tính có nhiều nét bù trừ đối lập, đây lại là yếu tố tạo nên sự tò mò!";
       }
 
       resultBox.style.display = "block";
@@ -633,13 +798,12 @@
       localStorage.setItem("dating_quiz_scores", JSON.stringify(data));
     }
 
-    // ĐẶT LẠI ĐIỂM MỘT CHỦ ĐỀ: CHỈ RESET VỀ BAN ĐẦU, KHÔNG TỰ NHẢY VÀO GAME
     function resetSingleTopicOnly(event, topicKey) {
-      event.stopPropagation(); // Ngăn sự kiện bấm nhầm vào nút mở game
+      event.stopPropagation();
       const data = getStoredScores();
       data[topicKey] = { score: null, replays: 0 };
       localStorage.setItem("dating_quiz_scores", JSON.stringify(data));
-      showTopicMenu(); // Vẽ lại menu để hiện lại trạng thái "Chưa chơi"
+      showTopicMenu();
     }
 
     function resetAllScores() {
