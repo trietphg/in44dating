@@ -631,7 +631,7 @@
     `;
 
     
-    // HÀM BĂM MẬT MÃ SHA-256 (CHUẨN BẢO MẬT WEB CRYPTO)
+    // HÀM BĂM MẬT MÃ SHA-256 HASHCODE
     async function sha256(message) {
       const msgBuffer = new TextEncoder().encode(message);
       const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
@@ -639,11 +639,12 @@
       return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
-    // CHUỖI MÃ HÓA CỦA "passcode :)))" (F12 NHÌN VÀO CHỈ THẤY CHUỖI NÀY, KHÔNG DỊCH NGƯỢC ĐƯỢC)
-    const CORRECT_HASH = "8153401579d5045dbdecf55f9630ea876be869f72ae08611c0f49cffb788c02a";
+    // MÃ BĂM CHUẨN XÁC CỦA CHỮ "pass, xóa ròi đừn soi mò"
+    const CORRECT_HASH = "15dc012efbbfa7520e53a71b12b5b37f40774a9d7008cf311baae8a1bf18ee6a";
 
     async function unlockSite() {
-      const pass = document.getElementById("passInput").value.trim();
+      const passInput = document.getElementById("passInput");
+      const pass = passInput.value.trim();
       const errorMsg = document.getElementById("error-msg");
       const lockScreen = document.getElementById("lock-screen");
       const app = document.getElementById("app");
