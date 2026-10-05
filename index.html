@@ -168,7 +168,15 @@
     .section-title { font-size: 0.95rem; font-weight: 700; color: #ff7b90; display: flex; align-items: center; gap: 6px; }
     .section-desc { font-size: 0.88rem; color: #d0d4dc; line-height: 1.5; }
     
-    /* TAGS CÓ THỂ TICK CHỌN TRỰC TIẾP */
+    .checklist-prompt {
+      background: rgba(253, 80, 104, 0.08);
+      border: 1px solid rgba(253, 80, 104, 0.3);
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
     .tag-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
     .tag-check {
       background: #202433;
@@ -196,13 +204,12 @@
       box-shadow: 0 0 10px rgba(253, 80, 104, 0.25);
     }
     .tag-check input[type="checkbox"] {
-      pointer-events: none; /* Khóa sự kiện riêng của ô input để nhận sự kiện click của cả thẻ label */
+      pointer-events: none;
       accent-color: var(--accent);
       width: 17px;
       height: 17px;
     }
 
-    /* NÚT XEM KẾT QUẢ HIỆU ỨNG GLOW NEON TINDER */
     .calc-btn {
       width: 100%;
       padding: 16px 20px;
@@ -236,7 +243,6 @@
       box-shadow: 0 4px 15px rgba(253, 80, 104, 0.4);
     }
 
-    /* KHUNG BIỂU ĐỒ TRỌNG SỐ ĐỒNG ĐIỆU */
     .chart-container {
       margin-top: 16px;
       padding-top: 14px;
@@ -331,6 +337,9 @@
 </head>
 <body>
 
+  <!-- ==========================================================================
+       [MÀN HÌNH KHÓA: LOCK SCREEN]
+       ========================================================================== -->
   <div id="lock-screen">
     <div style="font-size: 2.5rem; margin-bottom: 12px;">🔒</div>
     <h2>Xin chào mừng đến trang infor for dating của Triết</h2>
@@ -350,11 +359,68 @@
     <div id="error-msg"></div>
   </div>
 
+  <!-- CONTAINER CHÍNH CHỨA PROFILE SAU KHI UNLOCK -->
   <main id="app"></main>
 
   <script>
+    /* ==========================================================================
+       [SECTION 1: MẬT MÃ BẢO VỆ & HASHCODE SHA-256]
+       Ctrl + F từ khóa: [ĐỔI PASS TẠI ĐÂY]
+       ========================================================================== */
+
+    // HÀM BĂM SHA-256 TIÊU CHUẨN (DÙNG WEB CRYPTO API NGUYÊN BẢN CỦA TRÌNH DUYỆT)
+    // Tương thích 100% với các công cụ SHA-256 online trên mạng!
+    async function sha256(message) {
+      const msgBuffer = new TextEncoder().encode(message);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // [ĐỔI PASS TẠI ĐÂY]:
+    // Mật mã hiện tại: noinaycotui
+    // Cách đổi pass sau này:
+    // 1. Vào trang web băm SHA-256 online bất kỳ (vd: https://emn178.github.io/online-tools/sha256.html)
+    // 2. Nhập mật mã mới bạn muốn (ví dụ: "triet2026")
+    // 3. Sao chép chuỗi mã băm kết quả (dài 64 ký tự) và dán thay thế vào biến CORRECT_HASH bên dưới:
+    const CORRECT_HASH = "633e884bf0315a6b0c2a71f08e5c26b8cb797435f9923bb6656715f5d8869151";
+
     let failedAttempts = 0;
 
+    // HÀM XỬ LÝ MỞ KHÓA KHI BẤM NÚT HOẶC ENTER
+    async function unlockSite() {
+      const passInput = document.getElementById("passInput");
+      const pass = passInput.value.trim();
+      const errorMsg = document.getElementById("error-msg");
+      const lockScreen = document.getElementById("lock-screen");
+      const app = document.getElementById("app");
+
+      if (!pass) {
+        errorMsg.innerText = "Vui lòng nhập mật mã!";
+        errorMsg.style.display = "block";
+        return;
+      }
+
+      // Băm chuỗi người dùng vừa nhập bằng SHA-256
+      const inputHash = await sha256(pass);
+
+      // So sánh với mã băm chuẩn
+      if (inputHash === CORRECT_HASH) {
+        lockScreen.style.display = "none";
+        app.innerHTML = RAW_HTML;
+        app.style.display = "block";
+        errorMsg.style.display = "none";
+      } else {
+        failedAttempts++;
+        errorMsg.innerText = `Mật mã không đúng (Sai lần thứ ${failedAttempts})!`;
+        errorMsg.style.display = "block";
+        errorMsg.style.animation = 'none';
+        errorMsg.offsetHeight;
+        errorMsg.style.animation = 'shake 0.3s ease-in-out';
+      }
+    }
+
+    // HÀM ẨN / HIỆN MẬT MÃ KHI BẤM BIỂU TƯỢNG CON MẮT
     function togglePasswordVisibility() {
       const passInput = document.getElementById("passInput");
       const iconOpen = document.getElementById("eye-icon-open");
@@ -370,6 +436,9 @@
       }
     }
 
+    /* ==========================================================================
+       [SECTION 2: NỘI DUNG HỒ SƠ PROFILE HTML NGUYÊN BẢN]
+       ========================================================================== */
     const RAW_HTML = `
       <div class="profile-layout">
         
@@ -539,7 +608,7 @@
             </div>
           </div>
 
-          <!-- NÚT SUBMIT & KẾT QUẢ BIỂU ĐỒ NÂNG CẤP HIỆU ỨNG -->
+          <!-- NÚT XEM KẾT QUẢ ĐỒNG ĐIỆU -->
           <div style="margin-top: 8px; margin-bottom: 24px;">
             <button class="calc-btn" onclick="calculateMatch()">
               <span>✨ Xem mình đồng điệu bao nhiêu & Biểu đồ 📊</span>
@@ -547,7 +616,6 @@
             
             <div id="matchResult" class="result-box" style="display:none; background:rgba(26,29,38,0.9); border:1px solid rgba(253,80,104,0.4); padding:24px 18px; border-radius:20px; margin-top:14px; backdrop-filter:blur(12px); box-shadow:0 12px 35px rgba(253,80,104,0.15);">
               
-              <!-- VÒNG TRÒN NEON ĐIỂM SỐ -->
               <div style="width:110px; height:110px; margin:0 auto 12px; border-radius:50%; background:radial-gradient(circle, #251b2e 0%, #13151c 100%); border:3px solid var(--accent); display:flex; flex-direction:column; justify-content:center; align-items:center; box-shadow:0 0 20px rgba(253,80,104,0.4);">
                 <div id="scoreDisplay" style="font-size:2rem; font-weight:900; background:linear-gradient(45deg, #ff7675, #fd79a8, #fdcb6e); -webkit-background-clip:text; -webkit-text-fill-color:transparent; line-height:1;">0%</div>
                 <div style="font-size:0.7rem; color:#a29bfe; margin-top:4px; font-weight:700; letter-spacing:1px;">MATCH</div>
@@ -564,7 +632,6 @@
                   <span id="highestTrait" style="color:#38ef7d; font-size:0.8rem; font-weight:700;"></span>
                 </div>
 
-                <!-- 1. Gu & Thẩm mỹ -->
                 <div class="bar-item">
                   <div class="bar-info">
                     <span>🎨 Gu Thẩm Mỹ (Kiến trúc, Nhạc, Cà phê)</span>
@@ -575,7 +642,6 @@
                   </div>
                 </div>
 
-                <!-- 2. Lối sống & Thể chất -->
                 <div class="bar-item">
                   <div class="bar-info">
                     <span>⚡ Lối Sống & Kỷ Luật Thể Chất</span>
@@ -586,7 +652,6 @@
                   </div>
                 </div>
 
-                <!-- 3. Tư duy & Nguyên tắc -->
                 <div class="bar-item">
                   <div class="bar-info">
                     <span>⚖️ Tư Duy, Pháp Lý & Nguyên Tắc Hẹn Hò</span>
@@ -597,7 +662,6 @@
                   </div>
                 </div>
 
-                <!-- 4. Riêng tư & Thân mật -->
                 <div class="bar-item">
                   <div class="bar-info">
                     <span>🔒 Thân Mật, Cảm Xúc & XHTD</span>
@@ -630,51 +694,11 @@
       </div>
     `;
 
-    
-    // HÀM BĂM MẬT MÃ SHA-256 HASHCODE
-   // HÀM BĂM NHẸ (FAST HASH), CHỐNG TREO RAM VÀ CHỐNG TRÀN BỘ NHỚ TRÌNH DUYỆT
-    function secureHash(str) {
-      let h1 = 0xdeadbeef, h2 = 0x41c64e6d;
-      for (let i = 0; i < str.length; i++) {
-        let ch = str.charCodeAt(i);
-        h1 = Math.imul(h1 ^ ch, 2654435761);
-        h2 = Math.imul(h2 ^ ch, 1597334677);
-      }
-      h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
-      h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
-      return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16);
-    }
+    /* ==========================================================================
+       [SECTION 3: XỬ LÝ TICK CHỌN TAGS & TÍNH ĐIỂM ĐỒNG ĐIỆU]
+       Ctrl + F từ khóa: [TÍNH ĐIỂM MATCH]
+       ========================================================================== */
 
-    // CHUỖI MUỐI BÍ MẬT & MÃ HÓA CỦA "pass"
-    const SALT = "_triet_secure_salt_2026";
-    const CORRECT_HASH = "8ac31922c00222a";
-
-    function unlockSite() {
-      const passInput = document.getElementById("passInput");
-      const pass = passInput.value.trim();
-      const errorMsg = document.getElementById("error-msg");
-      const lockScreen = document.getElementById("lock-screen");
-      const app = document.getElementById("app");
-
-      const inputHash = secureHash(pass + SALT);
-
-      if (inputHash === CORRECT_HASH) {
-        lockScreen.style.display = "none";
-        app.innerHTML = RAW_HTML;
-        app.style.display = "block";
-        errorMsg.style.display = "none";
-      } else {
-        failedAttempts++;
-        errorMsg.innerText = `Bạn đã nhập sai lần thứ ${failedAttempts}!`;
-        errorMsg.style.display = "block";
-        errorMsg.style.animation = 'none';
-        errorMsg.offsetHeight;
-        errorMsg.style.animation = 'shake 0.3s ease-in-out';
-      }
-    }
-    
-
-    // HÀM XỬ LÝ CLICK: TỰ TICK CHECKBOX VÀ BẬT SÁNG VIỀN Ô
     function handleTagClick(labelEl) {
       const cb = labelEl.querySelector('input[type="checkbox"]');
       cb.checked = !cb.checked;
@@ -685,7 +709,7 @@
       }
     }
 
-    // HÀM TÍNH TOÁN VÀ VẼ BIỂU ĐỒ TRỌNG SỐ VỚI HIỆU ỨNG ĐẾM SỐ
+    // [TÍNH ĐIỂM MATCH]
     function calculateMatch() {
       const categories = {
         aesthetic: { name: "Gu Thẩm Mỹ", total: 0, checked: 0 },
@@ -749,7 +773,7 @@
       resultBox.style.display = "block";
       resultBox.scrollIntoView({ behavior: 'smooth' });
 
-      // HIỆU ỨNG SỐ NHẢY TỪ 0% ĐẾN KẾT QUẢ THỰC TẾ
+      // Hiệu ứng số nhảy mượt mà từ 0% đến giá trị thực
       let currentVal = 0;
       scoreDisplay.innerText = "0%";
       const duration = 1000;
@@ -768,6 +792,12 @@
       }, stepTime);
     }
 
+    /* ==========================================================================
+       [SECTION 4: DỮ LIỆU CÂU HỎI & LOGIC MINI-GAME HUB]
+       Ctrl + F từ khóa: [DỮ LIỆU QUIZ]
+       ========================================================================== */
+
+    // [DỮ LIỆU QUIZ]
     const QUIZ_DATA_HUB = {
       personality: {
         title: "Tính Cách & Sở Thích",
@@ -973,7 +1003,7 @@
           </button>
 
           <button class="quiz-opt-btn" style="display:flex; justify-content:space-between; align-items:center;" onclick="startQuiz('lifestyle')">
-            <span>⚖️ 2. Quan Điểm & Lối Sống</span>
+            <span>⚖️️ 2. Quan Điểm & Lối Sống</span>
             ${getActionControl('lifestyle')}
           </button>
 
