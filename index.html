@@ -364,31 +364,17 @@
 
   <script>
     /* ==========================================================================
-       [SECTION 1: MẬT MÃ BẢO VỆ & HASHCODE SHA-256]
+       [SECTION 1: MẬT MÃ TRUY CẬP TRỰC TIẾP]
        Ctrl + F từ khóa: [ĐỔI PASS TẠI ĐÂY]
        ========================================================================== */
 
-    // HÀM BĂM SHA-256 TIÊU CHUẨN (DÙNG WEB CRYPTO API NGUYÊN BẢN CỦA TRÌNH DUYỆT)
-    // Tương thích 100% với các công cụ SHA-256 online trên mạng!
-    async function sha256(message) {
-      const msgBuffer = new TextEncoder().encode(message);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    }
-
-    // [ĐỔI PASS TẠI ĐÂY]:
-    // Mật mã hiện tại: noinaycotui
-    // Cách đổi pass sau này:
-    // 1. Vào trang web băm SHA-256 online bất kỳ (vd: https://emn178.github.io/online-tools/sha256.html)
-    // 2. Nhập mật mã mới bạn muốn (ví dụ: "triet2026")
-    // 3. Sao chép chuỗi mã băm kết quả (dài 64 ký tự) và dán thay thế vào biến CORRECT_HASH bên dưới:
-   const CORRECT_HASH = "159fa7cb4f5f59011beea17eec934ec7c2ba58c14828135824c2fc935821d3f9";
+    // [ĐỔI PASS TẠI ĐÂY]: Mật mã truy cập hiện tại
+    const MY_PASSCODE = "lamotducminhtriet";
 
     let failedAttempts = 0;
 
-    // HÀM XỬ LÝ MỞ KHÓA KHI BẤM NÚT HOẶC ENTER
-    async function unlockSite() {
+    // HÀM XỬ LÝ MỞ KHÓA TRỰC TIẾP
+    function unlockSite() {
       const passInput = document.getElementById("passInput");
       const pass = passInput.value.trim();
       const errorMsg = document.getElementById("error-msg");
@@ -401,11 +387,7 @@
         return;
       }
 
-      // Băm chuỗi người dùng vừa nhập bằng SHA-256
-      const inputHash = await sha256(pass);
-
-      // So sánh với mã băm chuẩn
-      if (inputHash === CORRECT_HASH) {
+      if (pass === MY_PASSCODE) {
         lockScreen.style.display = "none";
         app.innerHTML = RAW_HTML;
         app.style.display = "block";
@@ -756,7 +738,9 @@
 
       scoreDetailRatio.innerText = `Đồng điệu ${grandChecked}/${grandTotal} tiêu chuẩn chung`;
 
-      if (highestCategory) {
+      if (overallPercent === 100) {
+        highestTrait.innerText = "🔥 Tất cả mọi thứ đều đồng điệu!";
+      } else if (highestCategory) {
         highestTrait.innerText = `🔥 Tần số cao nhất: ${highestCategory}`;
       } else {
         highestTrait.innerText = "";
@@ -1003,7 +987,7 @@
           </button>
 
           <button class="quiz-opt-btn" style="display:flex; justify-content:space-between; align-items:center;" onclick="startQuiz('lifestyle')">
-            <span>⚖️️ 2. Quan Điểm & Lối Sống</span>
+            <span>⚖️ 2. Quan Điểm & Lối Sống</span>
             ${getActionControl('lifestyle')}
           </button>
 
